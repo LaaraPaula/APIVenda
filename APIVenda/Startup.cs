@@ -1,4 +1,3 @@
-using ApiVenda.Data;
 using APIVenda.Data;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -28,7 +27,7 @@ namespace APIVenda
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddDbContext<ProdutoContext>(opts => opts.UseMySQL(Configuration.GetConnectionString("VendaConnection")));
+            services.AddDbContext<DataContext>(opts => opts.UseMySQL(Configuration.GetConnectionString("VendaConnection")));
             services.AddControllers();
             
             services.AddSwaggerGen();

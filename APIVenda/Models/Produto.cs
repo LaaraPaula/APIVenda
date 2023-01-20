@@ -1,6 +1,7 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 
-namespace ApiVenda.Models
+namespace APIVenda.Models
 {
     public class Produto
     {
@@ -23,5 +24,7 @@ namespace ApiVenda.Models
         [Required(ErrorMessage = "Campo 'QuantidadeEstoque' é obrigatório")]
         [Range(1, int.MaxValue, ErrorMessage = "A quantidade deve ser maior que zero")]
         public int QuantidadeEstoque { get; set; }
+
+        public virtual List<Compra> Compras { get; set; }
     }
 }

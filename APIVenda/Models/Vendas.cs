@@ -1,18 +1,23 @@
-﻿using ApiVenda.Models;
+﻿using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 
 namespace APIVenda.Models
 {
-    public class Venda
+    public class Vendas
     {
         [Key]
         [Required]
         public int Id { get; set; }
+        [Required]
         public int FuncionarioId { get; set; }
-
-        public Funcionario Funcionario { get; set; }
+        [Required]
+        public virtual Funcionarios Funcionario { get; set; }
+        [Required]
         public int ClienteId { get; set; }
-        public Cliente Cliente { get; set; }
+        [Required]
+        public virtual Clientes Cliente { get; set; }
+        [Required]
+        public virtual List<Compra> Compras { get; set; }
         [Required]
         public int Quantidade { get; set; }
         [Required]

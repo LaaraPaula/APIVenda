@@ -1,5 +1,4 @@
-﻿using ApiVenda.Models;
-using AutoMapper;
+﻿using AutoMapper;
 using APIVenda.Models;
 using APIVenda.Data.Dtos.Venda;
 
@@ -9,9 +8,9 @@ namespace APIVenda.Profiles
     {
         public VendaProfile()
         {
-            CreateMap<CreateVendaDto, Venda>();
-            CreateMap<Venda, RecuperaVendaDto>();
-            CreateMap<UpdateVendaDto, Venda>();
+            CreateMap<CreateVendaDto, Vendas>();
+            CreateMap<Vendas, RecuperaVendaDto>();
+            CreateMap<UpdateVendaDto, Vendas>();
         }
     }
 }

@@ -1,8 +1,7 @@
-﻿using ApiVenda.Models;
-using APIVenda.Models;
+﻿using APIVenda.Models;
 using Microsoft.EntityFrameworkCore;
 
-namespace ApiVenda.Data
+namespace APIVenda.Data
 {
     public class DataContext : DbContext
     {
@@ -11,11 +10,23 @@ namespace ApiVenda.Data
         {
             
         }
+        protected override void OnModelCreating(ModelBuilder builder)
+        {
+            builder.Entity<Vendas>()
+                   .HasOne(venda => venda.Funcionario)
+                   .WithMany(funcionario => funcionario.Vendas)
+                   .HasForeignKey(venda => venda.FuncionarioId).IsRequired(false);
+
+            builder.Entity<Vendas>()
+                   .HasOne(venda => venda.Cliente)
+                   .WithMany(cliente => cliente.Vendas)
+                   .HasForeignKey(venda => venda.ClienteId).IsRequired(false); 
+        }
         public DbSet<Produto> Produtos { get; set; }
-        public DbSet<Cliente> Clientes { get; set; }
-        public DbSet<Funcionario> Funcionarios { get; set; }
+        public DbSet<Clientes> Clientes { get; set; }
+        public DbSet<Funcionarios> Funcionarios { get; set; }
         public DbSet<Fornecedor> Fornecedores { get; set; }
-        public DbSet<Venda> Vendas { get; set; }
+        public DbSet<Vendas> Vendas { get; set; }
 
     }
 }

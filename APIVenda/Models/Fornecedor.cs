@@ -1,18 +1,10 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace ApiVenda.Models
+namespace APIVenda.Models
 {
-    public class Fornecedor
+    public class Fornecedor : Pessoa
     {
-        [Key]
-        [Required]
-        public int Id { get; set; }
-        [Required]
-        public string Nome { get; set; }
-        [Required]
-        public string Telefone { get; set; }
-        [Required]
-        public string Endereço { get; set; }
+        
 
     }
 }

@@ -2,5 +2,6 @@
 {
     public class CreateClienteDto
     {
+        public string Nome { get; set; }
     }
 }

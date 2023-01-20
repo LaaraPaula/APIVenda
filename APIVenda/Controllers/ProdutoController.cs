@@ -1,4 +1,4 @@
-﻿using ApiVenda.Models;
+﻿using APIVenda.Models;
 using APIVenda.Data;
 using APIVenda.Data.Dtos.Produto;
 using AutoMapper;
@@ -13,9 +13,9 @@ namespace APIVenda.Controllers
     [Route("controller")]
     public class ProdutoController : ControllerBase
     {
-        private ProdutoContext _context;
+        private DataContext _context;
         private IMapper _mapper;
-        public ProdutoController(ProdutoContext context, IMapper mapper)
+        public ProdutoController(DataContext context, IMapper mapper)
         {
             _context = context;
             _mapper = mapper;
@@ -40,7 +40,11 @@ namespace APIVenda.Controllers
         public IActionResult RecuperaProdutosPorId(int id)
         {
             Produto produtoEncontrado = _context.Produtos.FirstOrDefault(p => p.Id == id);
-            if (produtoEncontrado != null) return Ok(produtoEncontrado);
+            if (produtoEncontrado != null)
+            {
+                RecuperaProdutoDto produtoDto = _mapper.Map<RecuperaProdutoDto>(produtoEncontrado);
+                return Ok(produtoDto);
+            }
             return NotFound();
         }
 

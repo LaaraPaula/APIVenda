@@ -2,5 +2,6 @@
 {
     public class CreateFuncionarioDto
     {
+        public string Nome { get; set; }
     }
 }
