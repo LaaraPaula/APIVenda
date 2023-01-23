@@ -1,9 +1,10 @@
 ﻿using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.Text.Json.Serialization;
 
 namespace APIVenda.Models
 {
-    public class Vendas
+    public class Pedido
     {
         [Key]
         [Required]
@@ -17,9 +18,13 @@ namespace APIVenda.Models
         [Required]
         public virtual Clientes Cliente { get; set; }
         [Required]
-        public virtual List<Compra> Compras { get; set; }
+        public virtual Produto Produto { get; set; }
+        public virtual int ProdutoId { get; set; }
+        [JsonIgnore]
+        public virtual Venda Venda { get; set; }
+        public virtual int VendaId { get; set; }
         [Required]
-        public int Quantidade { get; set; }
+        public int QuantidadeItens { get; set; }
         [Required]
         public decimal ValorCompra { get; set; }
     }

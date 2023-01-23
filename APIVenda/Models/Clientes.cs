@@ -6,6 +6,6 @@ namespace APIVenda.Models
     public class Clientes :Pessoa
     {
         [JsonIgnore]
-        public List<Vendas> Vendas { get; set; }
+        public List<Pedido> Vendas { get; set; }
     }
 }

@@ -1,22 +1,21 @@
 ﻿using APIVenda.Data;
-using APIVenda.Data.Dtos.Funcionario;
+using APIVenda.Data.Dtos.Pedido;
 using APIVenda.Data.Dtos.Venda;
 using APIVenda.Models;
 using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Filters;
 using System;
-using System.Collections.Generic;
 using System.Linq;
 
 namespace APIVenda.Controllers
 {
     [ApiController]
-    [Route("controller")]
-    public class VendaController : ControllerBase
+    [Route("[controller]")]
+    public class VendaController :ControllerBase
     {
         private DataContext _context;
         private IMapper _mapper;
+
         public VendaController(DataContext context, IMapper mapper)
         {
             _context = context;
@@ -25,50 +24,32 @@ namespace APIVenda.Controllers
         [HttpPost("AdicionaVenda")]
         public IActionResult AdicionaVenda(CreateVendaDto dto)
         {
-            Vendas venda = _mapper.Map<Vendas>(dto);
+            Venda venda = _mapper.Map<Venda>(dto);
             _context.Vendas.Add(venda);
+            foreach (var item in venda.Pedidos)
+            {
+                if (item.Id == 0)
+                {
+                    item.VendaId = venda.Id;
+                    _context.Pedidos.Add(item);
+                }
+            }
             _context.SaveChanges();
-            return CreatedAtAction(nameof(RecuperaVendaPorId), new { Id = venda.Id }, venda);
+            return CreatedAtAction(nameof(RecuperaVendaPorId), new { Id = venda.Id},venda);
         }
-        [HttpGet("RecuperaVendaPorId")]
-        public IActionResult RecuperaVendaPorId(int id)
+
+        private object RecuperaVendaPorId(int id)
         {
-            Vendas vendaEncontrado = _context.Vendas.FirstOrDefault(v => v.Id == id);
+            Venda vendaEncontrado = _context.Vendas.FirstOrDefault(v => v.Id == id);
             if (vendaEncontrado != null)
             {
-                RecuperaVendaDto vendaDto = new RecuperaVendaDto 
-                { 
-                    HoraDaConsulta = DateTime.Now
-                };
-                return Ok(vendaEncontrado);
+                RecuperaVendaDto vendaDto = _mapper.Map<RecuperaVendaDto>(vendaEncontrado);
+
+                vendaDto.HoraDaConsulta = DateTime.Now;
+                
+                return Ok(vendaDto);
             }
             return NotFound();
-        }
-        public IEnumerable<Vendas> RecuperaVenda()
-        {
-            return _context.Vendas;
-        }
-        [HttpPut("AtualizaVenda")]
-        public IActionResult AtualizaVenda(int id, UpdateVendaDto vendaDto)
-        {
-            Vendas venda = _context.Vendas.FirstOrDefault(v => v.Id == id);
-            if (venda == null) return NotFound();
-
-            _mapper.Map(vendaDto, venda);
-            _context.SaveChanges();
-            return NoContent();
-
-        }
-
-        [HttpDelete("DeletaVenda")]
-        public IActionResult DeletaVenda(int id)
-        {
-            Vendas venda = _context.Vendas.FirstOrDefault(v => v.Id == id);
-            if (venda == null) return NotFound();
-            _context.Remove(venda);
-            _context.SaveChanges();
-            return NoContent();
-
         }
     }
 }

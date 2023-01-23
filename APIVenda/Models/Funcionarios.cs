@@ -7,6 +7,6 @@ namespace APIVenda.Models
     {
         public int Cargo { get; set; }
         [JsonIgnore]
-        public virtual List<Vendas> Vendas { get; set; }
+        public virtual List<Pedido> Vendas { get; set; }
     }
 }

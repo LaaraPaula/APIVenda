@@ -8,9 +8,9 @@ namespace APIVenda.Profiles
     {
         public VendaProfile()
         {
-            CreateMap<CreateVendaDto, Vendas>();
-            CreateMap<Vendas, RecuperaVendaDto>();
-            CreateMap<UpdateVendaDto, Vendas>();
+            CreateMap<CreateVendaDto, Venda>();
+            CreateMap<Venda, RecuperaVendaDto>();
+            CreateMap<UpdateVendaDto, Venda>();
         }
     }
 }

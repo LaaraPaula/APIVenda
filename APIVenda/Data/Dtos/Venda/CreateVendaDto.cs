@@ -10,13 +10,9 @@ namespace APIVenda.Data.Dtos.Venda
         [Required]
         public int Id { get; set; }
         [Required]
-        public int FuncionarioId { get; set; }
+        public virtual List<Models.Venda> Compras { get; set; }
         [Required]
-        public int ClienteId { get; set; }
-        [Required]
-        public virtual List<Compra> Compras { get; set; }
-        [Required]
-        public int Quantidade { get; set; }
+        public virtual APIVenda.Models.Pedido PedidoId { get; set; }
         [Required]
         public decimal ValorCompra { get; set; }
     }

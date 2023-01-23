@@ -26,8 +26,11 @@ namespace APIVenda.Controllers
         public IActionResult AdicionaFuncionario(CreateFuncionarioDto dto)
         {
             Funcionarios funcionario = _mapper.Map<Funcionarios>(dto);
-            _context.Funcionarios.Add(funcionario);
-            _context.SaveChanges();
+            if (funcionario.Id==0)
+            {
+                _context.Funcionarios.Add(funcionario);
+                _context.SaveChanges();
+            }
             return CreatedAtAction(nameof(RecuperaFuncionarioPorId), new { Id = funcionario.Id }, funcionario);
         }
         [HttpGet("RecuperaFuncionarioPorId")]

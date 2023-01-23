@@ -2,15 +2,19 @@
 using System;
 using System.ComponentModel.DataAnnotations;
 
-namespace APIVenda.Data.Dtos.Venda
+namespace APIVenda.Data.Dtos.Pedido
 {
-    public class RecuperaVendaDto
+    public class RecuperaPedidoDto
     {
+        [Key]
+        [Required]
         public int Id { get; set; }
+
         public Funcionarios Funcionario { get; set; }
         public Clientes Cliente { get; set; }
-        public APIVenda.Models.Produto Produtos { get; set; }
-        public APIVenda.Models.Pedido Pedido  { get; set; }
+        [Required]
+        public int Quantidade { get; set; }
+        [Required]
         public decimal ValorCompra { get; set; }
         public DateTime HoraDaConsulta { get; set; }
     }

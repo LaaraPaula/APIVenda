@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.Text.Json.Serialization;
 
 namespace APIVenda.Models
 {
@@ -25,6 +26,8 @@ namespace APIVenda.Models
         [Range(1, int.MaxValue, ErrorMessage = "A quantidade deve ser maior que zero")]
         public int QuantidadeEstoque { get; set; }
 
-        public virtual List<Compra> Compras { get; set; }
+        [JsonIgnore]
+        //public virtual List<Venda> Vendas { get; set; }
+        public virtual List<Pedido> Pedidos { get; set; }
     }
 }

@@ -25,7 +25,11 @@ namespace APIVenda.Controllers
         public IActionResult AdicionaProduto(CreateProdutoDto produtoDto)
         {
             Produto produto = _mapper.Map<Produto>(produtoDto);
-            _context.Produtos.Add(produto);
+            if (produto.Id == 0)
+            {
+                _context.Produtos.Add(produto);
+                _context.SaveChanges();
+            }
             _context.SaveChanges();
             return CreatedAtAction(nameof(RecuperaProdutosPorId), new { Id = produto.Id }, produto);
         }
