@@ -1,8 +1,11 @@
-﻿using APIVenda.Data;
+﻿using APIVenda.Aplication;
+using APIVenda.Data;
 using APIVenda.Data.Dtos.Fornecedor;
+using APIVenda.Data.Dtos.Produto;
 using APIVenda.Models;
 using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -12,64 +15,68 @@ namespace APIVenda.Controllers
     [Route("controller")]
     public class FornecedorController :ControllerBase
     {
-        private DataContext _context;
-        private IMapper _mapper;
-        public FornecedorController(DataContext context, IMapper mapper)
+        private FornecedorApp _fornecedorApp;
+        public FornecedorController(DataContext context)
         {
-            _context = context;
-            _mapper = mapper;
+            _fornecedorApp = new FornecedorApp(context);
         }
 
-        [HttpPost("AdicionarFornecedor")]
-        public IActionResult AdicionaFornecedor(CreateFornecedorDto fornecedorDto)
+        [HttpPost("SaveFornecedor")]
+        public IActionResult SaveFornecedor(FornecedorDto fornecedorDto)
         {
-            Fornecedor fornecedor = _mapper.Map<Fornecedor>(fornecedorDto);
-            if (fornecedor.Id == 0)
+            try
             {
-                _context.Fornecedores.Add(fornecedor);
-                _context.SaveChanges();
+                var fornecedor = _fornecedorApp.SaveFornecedor(fornecedorDto);
+
+                return Ok(fornecedor);
             }
-            return CreatedAtAction(nameof(RecuperarFornecedorPorId), new { Id = fornecedor.Id }, fornecedor);
-        }
 
-        [HttpGet("RecuperarFornecedor")]
-        public IEnumerable<Fornecedor> RecuperarFornecedor()
-        {
-            return _context.Fornecedores;
-        }
-
-        [HttpGet("RecuperarFornecedorPorId")]
-        public IActionResult RecuperarFornecedorPorId(int id)
-        {
-            Fornecedor fornecedorEncontrado = _context.Fornecedores.FirstOrDefault(p => p.Id == id);
-            if (fornecedorEncontrado != null)
+            catch (Exception ex)
             {
-                RecuperaFornecedorDto fornecedorDto = _mapper.Map<RecuperaFornecedorDto>(fornecedorEncontrado);
-                return Ok(fornecedorDto);
+                return BadRequest(ex.Message);
             }
-            return NotFound();
         }
 
-        [HttpPut("AtualizaFornecedor")]
-        public IActionResult AtualizaFornecedor(int id, UpdateFornecedorDto fornecedorDto)
+        [HttpGet("ExibeFornecedores")]
+        public IActionResult ExibeFornecedores()
         {
-            Fornecedor fornecedorEncontrado = _context.Fornecedores.FirstOrDefault(p => p.Id == id);
-            if (fornecedorEncontrado == null) return NotFound();
+            try
+            {
+                return Ok(_fornecedorApp.ExibeFornecedores());
 
-            _mapper.Map(fornecedorDto, fornecedorEncontrado);
-            _context.SaveChanges();
-            return Ok(fornecedorDto);
-
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
         }
 
+        [HttpGet("ExibeFornecedorPorId")]
+        public IActionResult ExibeFornecedorPorId(int id)
+        {
+            try
+            {
+                var fornecedor = _fornecedorApp.ExibePorId(id);
+                return Ok(fornecedor);
+
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
         [HttpDelete("DeletaFornecedor")]
         public IActionResult DeletaFornecedor(int id)
         {
-            Fornecedor fornecedorEncontrado = _context.Fornecedores.FirstOrDefault(p => p.Id == id);
-            if (fornecedorEncontrado == null) return NotFound();
-            _context.Remove(fornecedorEncontrado);
-            _context.SaveChanges();
-            return NoContent();
+            try
+            {
+                _fornecedorApp.DeletaFornecedor(id);
+                return Ok("FORNECEDOR deletado!");
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
 
         }
     }

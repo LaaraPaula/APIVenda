@@ -1,14 +1,12 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace APIVenda.Data.Dtos.Fornecedor
+namespace APIVenda.Data.Dtos.Cliente
 {
-    public class CreateFornecedorDto
+    public class ClienteDto
     {
-        [Required]
+        public int Id { get; set; }
         public string Nome { get; set; }
-        [Required]
         public string Telefone { get; set; }
-        [Required]
         public string Endereco { get; set; }
     }
 }

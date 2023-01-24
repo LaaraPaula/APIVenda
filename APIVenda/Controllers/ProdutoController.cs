@@ -6,6 +6,9 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
 using System.Collections.Generic;
 using System.Linq;
+using APIVenda.Aplication;
+using APIVenda.Data.Dtos.Cliente;
+using System;
 
 namespace APIVenda.Controllers
 {
@@ -13,67 +16,69 @@ namespace APIVenda.Controllers
     [Route("controller")]
     public class ProdutoController : ControllerBase
     {
-        private DataContext _context;
-        private IMapper _mapper;
-        public ProdutoController(DataContext context, IMapper mapper)
+        private readonly ProdutoApp _produtoApp;
+        public ProdutoController(DataContext context)
         {
-            _context = context;
-            _mapper = mapper;
+            _produtoApp= new ProdutoApp(context);
         }
 
-        [HttpPost("AdicionarProduto")]
-        public IActionResult AdicionaProduto(CreateProdutoDto produtoDto)
+        [HttpPost("SaveProduto")]
+        public IActionResult SaveProduto(ProdutoDto produtoDto)
         {
-            Produto produto = _mapper.Map<Produto>(produtoDto);
-            if (produto.Id == 0)
+            try
             {
-                _context.Produtos.Add(produto);
-                _context.SaveChanges();
+                var produto = _produtoApp.SaveProduto(produtoDto);
+
+                return Ok(produto);
             }
-            _context.SaveChanges();
-            return CreatedAtAction(nameof(RecuperaProdutosPorId), new { Id = produto.Id }, produto);
-        }
 
-        [HttpGet("RecuperaProdutos")]
-        public IEnumerable<Produto> RecuperaProdutos()
-        {
-            return _context.Produtos;
-        }
-
-        [HttpGet("RecuperaProdutosPorId")]
-        public IActionResult RecuperaProdutosPorId(int id)
-        {
-            Produto produtoEncontrado = _context.Produtos.FirstOrDefault(p => p.Id == id);
-            if (produtoEncontrado != null)
+            catch (Exception ex)
             {
-                RecuperaProdutoDto produtoDto = _mapper.Map<RecuperaProdutoDto>(produtoEncontrado);
-                return Ok(produtoDto);
+                return BadRequest(ex.Message);
             }
-            return NotFound();
         }
-
-        [HttpPut("AtualizaProduto")]
-        public IActionResult AtualizaProduto(int id , UpdateProdutoDto produtoDto)
+        [HttpGet("ExibeProdutos")]
+        public IActionResult ExibeProdutos()
         {
-            Produto produtoEncontrado = _context.Produtos.FirstOrDefault(p => p.Id == id);
-            if (produtoEncontrado == null) return NotFound();
+            try
+            {
+                return Ok(_produtoApp.ExibeProdutos());
 
-            _mapper.Map(produtoDto,produtoEncontrado);
-            _context.SaveChanges();
-            return NoContent();
-
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
         }
 
+        [HttpGet("ExibeProdutosPorId")]
+        public IActionResult ExibeProdutosPorId(int id)
+        {
+            try
+            {
+                var produto = _produtoApp.ExibePorId(id);
+                return Ok(produto);
+
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
         [HttpDelete("DeletaProduto")]
         public IActionResult DeletaProduto(int id)
         {
-            Produto produtoEncontrado = _context.Produtos.FirstOrDefault(p => p.Id == id);
-            if (produtoEncontrado == null) return NotFound();
-            _context.Remove(produtoEncontrado);
-            _context.SaveChanges();
-            return NoContent();
+            try
+            {
+                _produtoApp.DeletaProduto(id);
+                return Ok("PRODUTO deletado!");
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
 
         }
-        
+
     }
 }

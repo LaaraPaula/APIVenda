@@ -33,7 +33,7 @@ namespace APIVenda.Data
                    .HasForeignKey(pedido => pedido.VendaId).IsRequired(false);
         }
         public DbSet<Produto> Produtos { get; set; }
-        public DbSet<Clientes> Clientes { get; set; }
+        public DbSet<Cliente> Clientes { get; set; }
         public DbSet<Funcionarios> Funcionarios { get; set; }
         public DbSet<Fornecedor> Fornecedores { get; set; }
         public DbSet<Pedido> Pedidos{ get; set; }

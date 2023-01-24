@@ -8,7 +8,7 @@ namespace APIVenda.Profiles
     {
         public ProdutoProfile()
         {
-            CreateMap<CreateProdutoDto, Produto>();
+            CreateMap<ProdutoDto, Produto>();
             CreateMap<Produto, RecuperaProdutoDto>();
             CreateMap<UpdateProdutoDto, Produto>();
         }

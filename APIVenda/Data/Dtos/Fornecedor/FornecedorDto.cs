@@ -2,13 +2,11 @@
 
 namespace APIVenda.Data.Dtos.Fornecedor
 {
-    public class UpdateFornecedorDto
+    public class FornecedorDto
     {
-        [Required]
+        public int Id{ get; set; }
         public string Nome { get; set; }
-        [Required]
         public string Telefone { get; set; }
-        [Required]
         public string Endereco { get; set; }
     }
 }

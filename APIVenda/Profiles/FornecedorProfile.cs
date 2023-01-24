@@ -8,7 +8,7 @@ namespace APIVenda.Profiles
     {
         public FornecedorProfile()
         {
-            CreateMap<CreateFornecedorDto, Fornecedor>();
+            CreateMap<FornecedorDto, Fornecedor>();
             CreateMap<Fornecedor, RecuperaFornecedorDto>();
             CreateMap<UpdateFornecedorDto, Fornecedor>();
         }

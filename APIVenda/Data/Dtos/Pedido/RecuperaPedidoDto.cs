@@ -9,9 +9,6 @@ namespace APIVenda.Data.Dtos.Pedido
         [Key]
         [Required]
         public int Id { get; set; }
-
-        public Funcionarios Funcionario { get; set; }
-        public Clientes Cliente { get; set; }
         [Required]
         public int Quantidade { get; set; }
         [Required]

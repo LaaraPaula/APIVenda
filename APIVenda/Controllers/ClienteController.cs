@@ -1,9 +1,11 @@
 ﻿
+using APIVenda.Aplication;
 using APIVenda.Data;
 using APIVenda.Data.Dtos.Cliente;
 using APIVenda.Models;
 using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -13,66 +15,68 @@ namespace APIVenda.Controllers
     [Route("controller")]
     public class ClienteController : ControllerBase
     {
-        private DataContext _context;
-        private IMapper _mapper;
-        public ClienteController(DataContext context, IMapper mapper)
+        private readonly ClienteApp _clienteApp;
+
+        public ClienteController(DataContext context)
         {
-            _context = context;
-            _mapper = mapper;
+            _clienteApp = new ClienteApp(context);
         }
 
-        [HttpPost("AdicionarCliente")]
-        public IActionResult AdicionaCliente(CreateClienteDto clienteDto)
+        [HttpPost("SaveClient")]
+        public IActionResult SaveClient(ClienteDto clienteDto)
         {
-            Clientes cliente = _mapper.Map<Clientes>(clienteDto);
-            if (cliente.Id == 0)
+            try
             {
+                var cliente = _clienteApp.SaveClient(clienteDto);
 
-                _context.Clientes.Add(cliente);
-                _context.SaveChanges();
+                return Ok(cliente);
             }
-            _context.SaveChanges();
-            return CreatedAtAction(nameof(RecuperaClientesPorId), new { Id = cliente.Id }, cliente);
-        }
 
-        [HttpGet("RecuperaClientes")]
-        public IEnumerable<Clientes> RecuperaClientes()
-        {
-            return _context.Clientes;
-        }
-
-        [HttpGet("RecuperaClientesPorId")]
-        public IActionResult RecuperaClientesPorId(int id)
-        {
-            Clientes clienteEncontrado = _context.Clientes.FirstOrDefault(p => p.Id == id);
-            if (clienteEncontrado != null)
+            catch (Exception ex)
             {
-                RecuperaClienteDto clienteDto = _mapper.Map<RecuperaClienteDto>(clienteEncontrado);
-                return Ok(clienteDto);
+                return BadRequest(ex.Message);
             }
-            return NotFound();
         }
-
-        [HttpPut("AtualizaCliente")]
-        public IActionResult AtualizaCliente(int id, UpdateClienteDto clienteDto)
+        [HttpGet("ExibeClientes")]
+        public IActionResult ExibeClientes()
         {
-            Clientes clienteEncontrado = _context.Clientes.FirstOrDefault(p => p.Id == id);
-            if (clienteEncontrado == null) return NotFound();
+            try
+            {
+                return Ok(_clienteApp.ExibeClientes()); 
 
-            _mapper.Map(clienteDto, clienteEncontrado);
-            _context.SaveChanges();
-            return NoContent();
-
+            }
+            catch(Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
         }
 
+        [HttpGet("ExibeClientesPorId")]
+        public IActionResult ExibeClientesPorId(int id)
+        {
+            try
+            {
+                var cliente = _clienteApp.ExibePorId(id);
+                return Ok(cliente);
+
+            }
+            catch(Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
         [HttpDelete("DeletaCliente")]
         public IActionResult DeletaCliente(int id)
         {
-            Clientes clienteEncontrado = _context.Clientes.FirstOrDefault(p => p.Id == id);
-            if (clienteEncontrado == null) return NotFound();
-            _context.Remove(clienteEncontrado);
-            _context.SaveChanges();
-            return NoContent();
+            try
+            {
+                _clienteApp.DeletaCliente(id);
+                return Ok("CLIENTE deletado!");
+            }
+            catch(Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
 
         }
     }

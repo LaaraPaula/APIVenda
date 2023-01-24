@@ -7,6 +7,9 @@ using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
 using System.Linq;
+using APIVenda.Aplication;
+using APIVenda.Data.Dtos.Cliente;
+using System;
 
 namespace APIVenda.Controllers
 {
@@ -14,63 +17,73 @@ namespace APIVenda.Controllers
     [Route("controller")]
     public class FuncionarioController : ControllerBase
     {
-        private DataContext _context;
-        private IMapper _mapper;
+        private readonly FuncionarioApp _funcionarioApp;
 
-        public FuncionarioController(DataContext context,IMapper mapper)
+        public FuncionarioController(DataContext context)
         {
-            _context = context;
-            _mapper = mapper;
+            _funcionarioApp = new FuncionarioApp(context);
         }
-        [HttpPost("AdicionaFuncionario")]
-        public IActionResult AdicionaFuncionario(CreateFuncionarioDto dto)
+        [HttpPost("SaveFuncionario")]
+        public IActionResult SaveFuncionario(FuncionarioDto funcionarioDto)
         {
-            Funcionarios funcionario = _mapper.Map<Funcionarios>(dto);
-            if (funcionario.Id==0)
+            try
             {
-                _context.Funcionarios.Add(funcionario);
-                _context.SaveChanges();
+                var funcionario = _funcionarioApp.SaveClient(funcionarioDto);
+
+                return Ok(funcionario);
             }
-            return CreatedAtAction(nameof(RecuperaFuncionarioPorId), new { Id = funcionario.Id }, funcionario);
-        }
-        [HttpGet("RecuperaFuncionarioPorId")]
-        public IActionResult RecuperaFuncionarioPorId(int id)
-        {
-            Funcionarios funcionario = _context.Funcionarios.FirstOrDefault(f => f.Id == id);
-            if (funcionario != null)
+
+            catch (Exception ex)
             {
-                RecuperaFuncionarioDto funcionarioDto = _mapper.Map<RecuperaFuncionarioDto>(funcionario);
-                return Ok(funcionarioDto);
+                return BadRequest(ex.Message);
             }
-            return NotFound();
         }
-        [HttpGet("RecuperaFuncionarios")]
-        public IEnumerable<Funcionarios> RecuperaFuncionarios()
+        [HttpGet("ExibeFuncionarios")]
+        public IActionResult ExibeFuncionarios()
         {
-            return _context.Funcionarios;
+            try
+            {
+                return Ok(_funcionarioApp.ExibeFuncionarios());
+
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
         }
-        [HttpPut("AtualizaFuncionario")]
-        public IActionResult AtualizaFuncionario(int id, UpdateFuncionarioDto funcionarioDto)
+
+        [HttpGet("ExibeFuncionarioPorId")]
+        public IActionResult ExibeFuncionarioPorId(int id)
         {
-            Funcionarios funcionario = _context.Funcionarios.FirstOrDefault(f => f.Id == id);
-            if (funcionario == null) return NotFound();
+            try
+            {
+                var funcionario = _funcionarioApp.ExibePorId(id);
+                return Ok(funcionario);
 
-            _mapper.Map(funcionarioDto, funcionario);
-            _context.SaveChanges();
-            return NoContent();
-
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
         }
-
         [HttpDelete("DeletaFuncionario")]
         public IActionResult DeletaFuncionario(int id)
         {
-            Funcionarios funcionario = _context.Funcionarios.FirstOrDefault(f => f.Id == id);
-            if (funcionario == null) return NotFound();
+            try
+            {
+                _funcionarioApp.DeletaFuncionario(id);
+                return Ok("FUNCIONARIO deletado!");
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
 
-            _context.Remove(funcionario);
-            _context.SaveChanges();
-            return NoContent();
-
+        }
+        [HttpGet("ObterCargos")]
+        public IActionResult ObterCargos()
+        {
+            return Ok(_funcionarioApp.GetCargos());
         }
     }
 }

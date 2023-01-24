@@ -16,7 +16,7 @@ namespace APIVenda.Models
         [Required]
         public int ClienteId { get; set; }
         [Required]
-        public virtual Clientes Cliente { get; set; }
+        public virtual Fornecedor Cliente { get; set; }
         [Required]
         public virtual Produto Produto { get; set; }
         public virtual int ProdutoId { get; set; }
