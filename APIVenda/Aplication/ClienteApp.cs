@@ -21,7 +21,8 @@ namespace APIVenda.Aplication
         public ClienteDto SaveClient(ClienteDto clienteDto)
         {
             if (string.IsNullOrEmpty(clienteDto.Nome)) throw new Exception("Necessário preencher o campo nome");
-            if (string.IsNullOrEmpty(clienteDto.Telefone) || Regex.IsMatch(clienteDto.Telefone, @"^\d{6,7}[-]?\d{4}$")) throw new Exception("Necessário preencher o campo telefone");
+            if (string.IsNullOrEmpty(clienteDto.Telefone)) throw new Exception("Necessário preencher o campo telefone");
+            if (!Regex.IsMatch(clienteDto.Telefone, @"^\d{6,7}[-]?\d{4}$")) throw new Exception("Telefone em formato inválido\nEX:1199999-9999");
             if (string.IsNullOrEmpty(clienteDto.Endereco)) throw new Exception("Necessário preencher o campo endereço");
 
             Cliente cliente;

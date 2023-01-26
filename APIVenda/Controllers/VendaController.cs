@@ -76,11 +76,11 @@ namespace APIVenda.Controllers
 
         }
         [HttpGet("ObterPorPeriodo")]
-        public IActionResult ObterPorPeriodo()
+        public IActionResult ObterPorPeriodo(int dias)
         {
             try
             {
-                var vendas = _vendaApp.VendasPorPeriodo();
+                var vendas = _vendaApp.VendasPorPeriodo(dias);
                 return Ok(vendas);
             }
             catch(Exception ex)

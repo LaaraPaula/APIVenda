@@ -9,8 +9,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace APIVenda.Migrations
 {
     [DbContext(typeof(DataContext))]
-    [Migration("20230123193158_Relacoes entre as tabelas")]
-    partial class Relacoesentreastabelas
+    [Migration("20230126131103_Initial")]
+    partial class Initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -19,7 +19,7 @@ namespace APIVenda.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 64)
                 .HasAnnotation("ProductVersion", "5.0.17");
 
-            modelBuilder.Entity("APIVenda.Models.Clientes", b =>
+            modelBuilder.Entity("APIVenda.Models.Cliente", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -97,29 +97,22 @@ namespace APIVenda.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    b.Property<int>("ClienteId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("FuncionarioId")
-                        .HasColumnType("int");
-
                     b.Property<int>("ProdutoId")
                         .HasColumnType("int");
 
                     b.Property<int>("QuantidadeItens")
                         .HasColumnType("int");
 
-                    b.Property<decimal>("ValorCompra")
+                    b.Property<decimal>("ValorTotalPedido")
+                        .HasColumnType("decimal(18, 2)");
+
+                    b.Property<decimal>("ValorUnitario")
                         .HasColumnType("decimal(18, 2)");
 
                     b.Property<int>("VendaId")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("ClienteId");
-
-                    b.HasIndex("FuncionarioId");
 
                     b.HasIndex("ProdutoId");
 
@@ -135,13 +128,13 @@ namespace APIVenda.Migrations
                         .HasColumnType("int");
 
                     b.Property<string>("Descricao")
-                        .HasMaxLength(1024)
-                        .HasColumnType("varchar(1024)");
+                        .HasColumnType("text");
 
                     b.Property<string>("Nome")
-                        .IsRequired()
-                        .HasMaxLength(60)
-                        .HasColumnType("varchar(60)");
+                        .HasColumnType("text");
+
+                    b.Property<int>("PedidoId")
+                        .HasColumnType("int");
 
                     b.Property<decimal>("PrecoUnitario")
                         .HasColumnType("decimal(18, 2)");
@@ -149,12 +142,7 @@ namespace APIVenda.Migrations
                     b.Property<int>("QuantidadeEstoque")
                         .HasColumnType("int");
 
-                    b.Property<int?>("VendaId")
-                        .HasColumnType("int");
-
                     b.HasKey("Id");
-
-                    b.HasIndex("VendaId");
 
                     b.ToTable("Produtos");
                 });
@@ -165,17 +153,47 @@ namespace APIVenda.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
+                    b.Property<int>("ClienteId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("FuncionarioId")
+                        .HasColumnType("int");
+
                     b.Property<DateTime>("HorarioVenda")
                         .HasColumnType("datetime");
 
+                    b.Property<decimal>("ValorFinal")
+                        .HasColumnType("decimal(18, 2)");
+
                     b.HasKey("Id");
+
+                    b.HasIndex("ClienteId");
+
+                    b.HasIndex("FuncionarioId");
 
                     b.ToTable("Vendas");
                 });
 
             modelBuilder.Entity("APIVenda.Models.Pedido", b =>
                 {
-                    b.HasOne("APIVenda.Models.Clientes", "Cliente")
+                    b.HasOne("APIVenda.Models.Produto", "Produto")
+                        .WithMany("Pedidos")
+                        .HasForeignKey("ProdutoId");
+
+                    b.HasOne("APIVenda.Models.Venda", "Venda")
+                        .WithMany("Pedidos")
+                        .HasForeignKey("VendaId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Produto");
+
+                    b.Navigation("Venda");
+                });
+
+            modelBuilder.Entity("APIVenda.Models.Venda", b =>
+                {
+                    b.HasOne("APIVenda.Models.Cliente", "Cliente")
                         .WithMany("Vendas")
                         .HasForeignKey("ClienteId");
 
@@ -183,31 +201,12 @@ namespace APIVenda.Migrations
                         .WithMany("Vendas")
                         .HasForeignKey("FuncionarioId");
 
-                    b.HasOne("APIVenda.Models.Produto", "Produto")
-                        .WithMany("Pedidos")
-                        .HasForeignKey("ProdutoId");
-
-                    b.HasOne("APIVenda.Models.Venda", "Venda")
-                        .WithMany("Pedidos")
-                        .HasForeignKey("VendaId");
-
                     b.Navigation("Cliente");
 
                     b.Navigation("Funcionario");
-
-                    b.Navigation("Produto");
-
-                    b.Navigation("Venda");
                 });
 
-            modelBuilder.Entity("APIVenda.Models.Produto", b =>
-                {
-                    b.HasOne("APIVenda.Models.Venda", null)
-                        .WithMany("Produtos")
-                        .HasForeignKey("VendaId");
-                });
-
-            modelBuilder.Entity("APIVenda.Models.Clientes", b =>
+            modelBuilder.Entity("APIVenda.Models.Cliente", b =>
                 {
                     b.Navigation("Vendas");
                 });
@@ -225,8 +224,6 @@ namespace APIVenda.Migrations
             modelBuilder.Entity("APIVenda.Models.Venda", b =>
                 {
                     b.Navigation("Pedidos");
-
-                    b.Navigation("Produtos");
                 });
 #pragma warning restore 612, 618
         }

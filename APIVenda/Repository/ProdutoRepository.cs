@@ -49,9 +49,11 @@ namespace APIVenda.Repository
             var query = from a in _context.Produtos
                         select new ProdutoDto
                         {
+                            Id = a.Id,
                             Nome = a.Nome,
                             Descricao = a.Descricao,
-                            PrecoUnitario = a.PrecoUnitario
+                            PrecoUnitario = a.PrecoUnitario,
+                            QuantidadeEstoque = a.QuantidadeEstoque
                         };
             return query.ToList();
         }

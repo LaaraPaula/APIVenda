@@ -8,6 +8,7 @@ using System.Collections.Generic;
 using System.Linq;
 using APIVenda.Data.Enum;
 using System.Text.RegularExpressions;
+using APIVenda.Data.Dtos.Cliente;
 
 namespace APIVenda.Aplication
 {
@@ -20,10 +21,11 @@ namespace APIVenda.Aplication
             _funcionarioRepository = new FuncionarioRepository(context);
         }
 
-        public FuncionarioDto SaveClient(FuncionarioDto funcionarioDto)
+        public FuncionarioDto SaveFuncionario(FuncionarioDto funcionarioDto)
         {
             if (string.IsNullOrEmpty(funcionarioDto.Nome)) throw new Exception("Necessário preencher o campo nome");
-            if (string.IsNullOrEmpty(funcionarioDto.Telefone) || Regex.IsMatch(funcionarioDto.Telefone, @"^\d{6,7}[-]?\d{4}$")) throw new Exception("Necessário preencher o campo telefone");
+            if (string.IsNullOrEmpty(funcionarioDto.Telefone)) throw new Exception("Necessário preencher o campo telefone");
+            if (!Regex.IsMatch(funcionarioDto.Telefone, @"^\d{6,7}[-]?\d{4}$")) throw new Exception("Telefone em formato inválido\nEX:1199999-9999");
             if (string.IsNullOrEmpty(funcionarioDto.Endereco)) throw new Exception("Necessário preencher o campo endereço");
             if (funcionarioDto.Cargo < 0) throw new Exception("Necessário preencher o campo cargo");
 
@@ -79,10 +81,24 @@ namespace APIVenda.Aplication
             };
         }
 
-        public List<EnumCargo> GetCargos()
+        public List<EnumCargoAtributo> GetCargos()
         {
-            var cargos = Enum.GetValues(typeof(EnumCargo)).Cast<EnumCargo>().ToList();
+            var cargos = EnumCargoModel.GetAtributo();
+
             return cargos;
+
+            //var exibe = cargos.Concat(idCargo);
+            //return String.Join(",", exibe);
+
+
+            //var list = new List<string>();
+            //
+            //for (int i = 0; i < cargos.Length; i++)
+            //{
+            //    list.Add($"{i + 1} - {cargos[i]}");
+            //}
+            //
+            //return list;
         }
     }
 }

@@ -40,8 +40,14 @@ namespace APIVenda.Aplication
                     QuantidadeItens = pedidoDto.QuantidadeItens,
                     ValorTotalPedido = (pedidoDto.QuantidadeItens * produto.PrecoUnitario)
                 };
-
-                pedidoDto.Id = _pedidoRepository.AddPedido(pedido);
+                if (pedido.QuantidadeItens<= produto.QuantidadeEstoque)
+                {
+                    pedidoDto.Id = _pedidoRepository.AddPedido(pedido);
+                }
+                else
+                {
+                    throw new Exception("Quandidade de itens no pedido maior que a quantidade no estoque");
+                }
             }
             else
             {

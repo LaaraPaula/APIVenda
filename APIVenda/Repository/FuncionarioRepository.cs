@@ -49,12 +49,19 @@ namespace APIVenda.Repository
             var query = from a in _context.Funcionarios
                         select new FuncionarioGetDto
                         {
+                            Id= a.Id,
                             Nome = a.Nome,
                             Cargo = ((EnumCargo)a.Cargo).ToString(),
-                            Telefone = a.Telefone
+                            Telefone = a.Telefone,
+                            Endereco=a.Endereco
                         };
             return query.ToList();;
         }
 
+        public Funcionarios GetVendedor(int id)
+        {
+            var vendedor = _context.Funcionarios.FirstOrDefault(x => x.Id == id && x.Cargo == (int)EnumCargo.Vendedor);
+            return vendedor;
+        }
     }
 }

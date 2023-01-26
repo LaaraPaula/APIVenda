@@ -7,7 +7,7 @@ namespace APIVenda.Data.Dtos.Venda
     public class VendaDto
     {
         public int Id { get; set; }
-        public int VendedorId { get; set; }
+        public int FuncionarioId { get; set; }
         public int ClienteId { get; set; }
         public decimal ValorCompra { get; set; }
     }

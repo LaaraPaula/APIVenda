@@ -10,6 +10,7 @@ using System.Linq;
 using APIVenda.Aplication;
 using APIVenda.Data.Dtos.Cliente;
 using System;
+using APIVenda.Data.Enum;
 
 namespace APIVenda.Controllers
 {
@@ -28,7 +29,7 @@ namespace APIVenda.Controllers
         {
             try
             {
-                var funcionario = _funcionarioApp.SaveClient(funcionarioDto);
+                var funcionario = _funcionarioApp.SaveFuncionario(funcionarioDto);
 
                 return Ok(funcionario);
             }
@@ -85,7 +86,6 @@ namespace APIVenda.Controllers
         {
             try
             {
-
                 return Ok(_funcionarioApp.GetCargos());
             }
             catch(Exception ex)

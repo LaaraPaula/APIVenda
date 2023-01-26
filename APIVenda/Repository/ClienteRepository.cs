@@ -47,8 +47,10 @@ namespace APIVenda.Repository
             var query = from a in _context.Clientes
                         select new ClienteDto
                         {
+                            Id=a.Id,
                             Nome = a.Nome,
-                            Telefone = a.Telefone
+                            Telefone = a.Telefone,
+                            Endereco = a.Endereco
                         };
             return query.ToList();
         }

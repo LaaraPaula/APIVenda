@@ -13,38 +13,40 @@ namespace APIVenda.Aplication
     {
         private readonly VendaRepository _vendaRepository;
         private readonly PedidoRepository _pedidoRepository;
+        private readonly FuncionarioRepository _funcionarioRepository;
         public VendaApp(DataContext context)
         {
             _vendaRepository = new VendaRepository(context);
             _pedidoRepository = new PedidoRepository(context);
+            _funcionarioRepository = new FuncionarioRepository(context);
         }
 
         public VendaDto SaveVenda(VendaDto vendaDto)
         {
-            if (vendaDto.VendedorId <= 0) throw new Exception("Necessário preencher o campo VendedorId");
+            if (vendaDto.FuncionarioId <= 0) throw new Exception("Necessário preencher o campo VendedorId");
             if (vendaDto.ClienteId <= 0) throw new Exception("Necessário preencher o campo ClienteId");
 
             var pedido = _pedidoRepository.GetPedidosVenda(vendaDto.Id) ?? throw new Exception("Pedidos não encontrados para esta venda");
-            
+            var funciorio = _funcionarioRepository.GetVendedor(vendaDto.FuncionarioId) ?? throw new Exception("Vendedor não encontrado");
             Venda venda;
             if (vendaDto.Id == 0)
             {
 
                 venda = new Venda
                 {
-                    VendedorId = vendaDto.VendedorId,
+                    FuncionarioId = vendaDto.FuncionarioId,
                     ClienteId = vendaDto.ClienteId,
                     HorarioVenda = DateTime.Now,
                     ValorFinal = _vendaRepository.SomarPedido(pedido)
                 };
-
                 vendaDto.Id = _vendaRepository.AddVenda(venda);
+                
             }
             else
             {
                 venda = _vendaRepository.GetVendaId(vendaDto.Id) ?? throw new Exception("Venda não encontrada");
 
-                venda.VendedorId = vendaDto.VendedorId;
+                venda.FuncionarioId = vendaDto.FuncionarioId;
                 venda.ClienteId = vendaDto.ClienteId;
                 venda.ValorFinal = _vendaRepository.SomarPedido(pedido);
 
@@ -73,9 +75,10 @@ namespace APIVenda.Aplication
             return vendas;
         }
 
-        public object VendasPorPeriodo()
+        public IList<ExibeVendaDto> VendasPorPeriodo(int dias)
         {
-            throw new NotImplementedException();
+            var vendas = _vendaRepository.VendaData(dias);
+            return vendas;
         }
     }
 }

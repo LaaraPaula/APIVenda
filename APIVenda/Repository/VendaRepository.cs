@@ -39,7 +39,7 @@ namespace APIVenda.Repository
         {
             var query = from ved in _context.Vendas
                         join fun in _context.Funcionarios
-                        on ved.VendedorId equals fun.Id
+                        on ved.FuncionarioId equals fun.Id
                         join cli in _context.Clientes
                         on ved.ClienteId equals cli.Id
                         select new ExibeVendaDto
@@ -76,7 +76,7 @@ namespace APIVenda.Repository
         {
             var query = from ved in _context.Vendas
                         join fun in _context.Funcionarios
-                        on ved.VendedorId equals fun.Id
+                        on ved.FuncionarioId equals fun.Id
                         join cli in _context.Clientes
                         on ved.ClienteId equals cli.Id
                         where ved.Id ==id
@@ -87,6 +87,13 @@ namespace APIVenda.Repository
                             ValorCompra = ved.ValorFinal
                         };
             return query.FirstOrDefault();
+        }
+
+        public IList<ExibeVendaDto> VendaData(int dias)
+        {
+            var data = Convert.ToDateTime(dias);
+            var vendas = _context.Vendas.Where(p => p.HorarioVenda <= data);
+            return (IList<ExibeVendaDto>)vendas;
         }
     }
 }
