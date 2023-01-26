@@ -1,5 +1,4 @@
-﻿using APIVenda.Data.Dtos.Cliente;
-using APIVenda.Data;
+﻿using APIVenda.Data;
 using APIVenda.Models;
 using APIVenda.Repository;
 using System;
@@ -8,6 +7,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using APIVenda.Data.Enum;
+using System.Text.RegularExpressions;
 
 namespace APIVenda.Aplication
 {
@@ -23,9 +23,9 @@ namespace APIVenda.Aplication
         public FuncionarioDto SaveClient(FuncionarioDto funcionarioDto)
         {
             if (string.IsNullOrEmpty(funcionarioDto.Nome)) throw new Exception("Necessário preencher o campo nome");
-            if (string.IsNullOrEmpty(funcionarioDto.Telefone)) throw new Exception("Necessário preencher o campo telefone");
+            if (string.IsNullOrEmpty(funcionarioDto.Telefone) || Regex.IsMatch(funcionarioDto.Telefone, @"^\d{6,7}[-]?\d{4}$")) throw new Exception("Necessário preencher o campo telefone");
             if (string.IsNullOrEmpty(funcionarioDto.Endereco)) throw new Exception("Necessário preencher o campo endereço");
-            if (string.IsNullOrEmpty(funcionarioDto.Endereco)) throw new Exception("Necessário preencher o campo endereço");
+            if (funcionarioDto.Cargo < 0) throw new Exception("Necessário preencher o campo cargo");
 
             Funcionarios funcionario;
             if (funcionarioDto.Id == 0)

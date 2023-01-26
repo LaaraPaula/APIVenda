@@ -7,10 +7,13 @@ namespace APIVenda.Models
     public class Venda
     {
         [Key]
-        [Required]
         public int Id { get; set; }
-        public virtual List<Pedido> Pedidos { get; set; }
-        public virtual List<Produto> Produtos { get; set; }
+        public decimal ValorFinal { get; set; }
         public DateTime HorarioVenda { get; set; }
+        public virtual Funcionarios Funcionario { get; set; }
+        public virtual int FuncionarioId { get; set; }
+        public virtual Cliente Cliente { get; set; }
+        public virtual int ClienteId { get; set; }
+        public virtual List<Pedido> Pedidos { get; set; }
     }
 }

@@ -1,4 +1,5 @@
-﻿using APIVenda.Data;
+﻿using APIVenda.Aplication;
+using APIVenda.Data;
 using APIVenda.Data.Dtos.Pedido;
 using APIVenda.Models;
 using AutoMapper;
@@ -13,68 +14,64 @@ namespace APIVenda.Controllers
     [Route("controller")]
     public class PedidoController : ControllerBase
     {
-        private DataContext _context;
-        private IMapper _mapper;
-        public PedidoController(DataContext context, IMapper mapper)
+        private readonly PedidoApp _pedidoApp;
+        public PedidoController(DataContext context)
         {
-            _context = context;
-            _mapper = mapper;
+            _pedidoApp = new PedidoApp(context);
         }
-        [HttpPost("AdicionaPedido")]
-        public IActionResult AdicionaPedido(CreatePedidoDto dto)
+        [HttpPost("SavePedido")]
+        public IActionResult SavePedido(PedidoDto pedidoDto)
         {
-            Pedido pedido = _mapper.Map<Pedido>(dto);
-            if (pedido.Id == 0)
+            try
             {
-                Produto produto = _context.Produtos.FirstOrDefault(p=> p.Id == pedido.ProdutoId);
-                if (produto.QuantidadeEstoque >= pedido.QuantidadeItens)
-                {
-                    pedido.ValorCompra = (pedido.QuantidadeItens * produto.PrecoUnitario);
-                    _context.Pedidos.Add(pedido);
-                    _context.SaveChanges();
-                }
+                var pedido = _pedidoApp.SavePedido(pedidoDto);
+                return Ok(pedido);
             }
-            return CreatedAtAction(nameof(RecuperaPedidoPorId), new { Id = pedido.Id }, pedido);
-        }
-        [HttpGet("RecuperaPedidoPorId")]
-        public IActionResult RecuperaPedidoPorId(int id)
-        {
-            Pedido pedidoEncontrado = _context.Pedidos.FirstOrDefault(v => v.Id == id);
-            if (pedidoEncontrado != null)
+            catch(Exception ex)
             {
-                RecuperaPedidoDto pedidoDto = new RecuperaPedidoDto 
-                { 
-                    HoraDaConsulta = DateTime.Now
-                };
-                return Ok(pedidoEncontrado);
+                return BadRequest(ex.Message);
             }
-            return NotFound();
         }
-        [HttpGet("RecuperaPedidos")]
-        public IEnumerable<Pedido> RecuperaPedidos()
+        [HttpGet("ExibePedidos")]
+        public IActionResult ExibePedidos()
         {
-            return _context.Pedidos;
+            try
+            {
+                return Ok(_pedidoApp.ExibePedidos());
+
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
         }
-        [HttpPut("AtualizaPedido")]
-        public IActionResult AtualizaPedido(int id, UpdatePedidoDto pedidoDto)
+
+        [HttpGet("ExibePedidoPorId")]
+        public IActionResult ExibePedidoPorId(int id)
         {
-            Pedido pedido = _context.Pedidos.FirstOrDefault(v => v.Id == id);
-            if (pedido == null) return NotFound();
+            try
+            {
+                var pedido = _pedidoApp.ExibePorId(id);
+                return Ok(pedido);
 
-            _mapper.Map(pedidoDto, pedido);
-            _context.SaveChanges();
-            return NoContent();
-
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
         }
-
         [HttpDelete("DeletaPedido")]
         public IActionResult DeletaPedido(int id)
         {
-            Pedido pedido = _context.Pedidos.FirstOrDefault(v => v.Id == id);
-            if (pedido == null) return NotFound();
-            _context.Remove(pedido);
-            _context.SaveChanges();
-            return NoContent();
+            try
+            {
+                _pedidoApp.DeletaPedido(id);
+                return Ok("PEDIDO deletado!");
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
 
         }
     }

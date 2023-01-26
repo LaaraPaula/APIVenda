@@ -1,4 +1,5 @@
-﻿using APIVenda.Data;
+﻿using APIVenda.Aplication;
+using APIVenda.Data;
 using APIVenda.Data.Dtos.Pedido;
 using APIVenda.Data.Dtos.Venda;
 using APIVenda.Models;
@@ -13,43 +14,79 @@ namespace APIVenda.Controllers
     [Route("[controller]")]
     public class VendaController :ControllerBase
     {
-        private DataContext _context;
-        private IMapper _mapper;
+        private readonly VendaApp _vendaApp;
 
-        public VendaController(DataContext context, IMapper mapper)
+        public VendaController(DataContext context)
         {
-            _context = context;
-            _mapper = mapper;
+            _vendaApp = new VendaApp(context);
         }
-        [HttpPost("AdicionaVenda")]
-        public IActionResult AdicionaVenda(CreateVendaDto dto)
+        [HttpPost("SaveVenda")]
+        public IActionResult SaveVenda(VendaDto vendaDto)
         {
-            Venda venda = _mapper.Map<Venda>(dto);
-            _context.Vendas.Add(venda);
-            foreach (var item in venda.Pedidos)
+            try
             {
-                if (item.Id == 0)
-                {
-                    item.VendaId = venda.Id;
-                    _context.Pedidos.Add(item);
-                }
+                var venda = _vendaApp.SaveVenda(vendaDto);
+                return Ok(venda);
             }
-            _context.SaveChanges();
-            return CreatedAtAction(nameof(RecuperaVendaPorId), new { Id = venda.Id},venda);
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+        [HttpGet("ExibeVendas")]
+        public IActionResult ExibeVendas()
+        {
+            try
+            {
+                return Ok(_vendaApp.ExibeVendas());
+
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
         }
 
-        private object RecuperaVendaPorId(int id)
+        [HttpGet("ExibeVendaPorId")]
+        public IActionResult ExibeVendaPorId(int id)
         {
-            Venda vendaEncontrado = _context.Vendas.FirstOrDefault(v => v.Id == id);
-            if (vendaEncontrado != null)
+            try
             {
-                RecuperaVendaDto vendaDto = _mapper.Map<RecuperaVendaDto>(vendaEncontrado);
+                var pedido = _vendaApp.ExibePorId(id);
+                return Ok(pedido);
 
-                vendaDto.HoraDaConsulta = DateTime.Now;
-                
-                return Ok(vendaDto);
             }
-            return NotFound();
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+        [HttpDelete("DeletaVenda")]
+        public IActionResult DeletaVenda(int id)
+        {
+            try
+            {
+                _vendaApp.DeletaVenda(id);
+                return Ok("VENDA deletada!");
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+
+        }
+        [HttpGet("ObterPorPeriodo")]
+        public IActionResult ObterPorPeriodo()
+        {
+            try
+            {
+                var vendas = _vendaApp.VendasPorPeriodo();
+                return Ok(vendas);
+            }
+            catch(Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
         }
     }
 }

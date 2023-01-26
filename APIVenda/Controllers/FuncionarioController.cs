@@ -83,7 +83,15 @@ namespace APIVenda.Controllers
         [HttpGet("ObterCargos")]
         public IActionResult ObterCargos()
         {
-            return Ok(_funcionarioApp.GetCargos());
+            try
+            {
+
+                return Ok(_funcionarioApp.GetCargos());
+            }
+            catch(Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
         }
     }
 }
