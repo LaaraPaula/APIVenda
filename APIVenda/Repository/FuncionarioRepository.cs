@@ -55,7 +55,7 @@ namespace APIVenda.Repository
                             Telefone = a.Telefone,
                             Endereco=a.Endereco
                         };
-            return query.ToList();;
+            return query.ToList();
         }
 
         public Funcionarios GetVendedor(int id)

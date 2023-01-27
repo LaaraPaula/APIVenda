@@ -10,6 +10,7 @@ namespace APIVenda.Data.Dtos.Funcionario
         public string Telefone { get; set; }
         public string Endereco { get; set; }
         public EnumCargo Cargo { get; set; }
+        public string CargoDesc { get { return new EnumCargoModel().GetAtributo(this.Cargo)?.Nome; } }
     }
 
     public class FuncionarioGetDto

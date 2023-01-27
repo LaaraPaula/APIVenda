@@ -34,6 +34,7 @@ namespace APIVenda.Data.Enum
                 case EnumCargo.Chefe: { Nome = "Chefe"; break; }
                 case EnumCargo.Telefonista: { Nome = "Telefonista"; break; }
                 case EnumCargo.GerenteComercial: { Nome = "Gerente Comercial"; break; }
+                default: return null;
             }
             return this;
 

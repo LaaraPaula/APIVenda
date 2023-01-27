@@ -67,6 +67,7 @@ namespace APIVenda.Aplication
             return new ProdutoDto
             {
                 Id = produto.Id,
+                Nome = produto.Nome,
                 Descricao = produto.Descricao,
                 PrecoUnitario = produto.PrecoUnitario,
                 QuantidadeEstoque = produto.QuantidadeEstoque

@@ -70,17 +70,17 @@ namespace APIVenda.Aplication
             return funcionarios;
         }
 
-        public FuncionarioDto ExibePorId(int id)
+        public FuncionarioGetDto ExibePorId(int id)
         {
             var funcionario = _funcionarioRepository.GetFuncionarioId(id) ?? throw new Exception("Funcionario não encontrado");
-            var cargo = new EnumCargoModel().MostraCargos();
-            return new FuncionarioDto
+            var cargo = new EnumCargoModel();
+            return new FuncionarioGetDto
             {
                 Id = funcionario.Id,
                 Nome = funcionario.Nome,
                 Telefone = funcionario.Telefone,
                 Endereco = funcionario.Endereco,
-                Cargo = (EnumCargo)funcionario.Cargo
+                Cargo = cargo.GetAtributo((EnumCargo)funcionario.Cargo).Nome
             };
         }
 
