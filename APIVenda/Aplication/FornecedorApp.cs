@@ -22,6 +22,9 @@ namespace APIVenda.Aplication
         public FornecedorDto SaveFornecedor(FornecedorDto fornecedorDto)
         {
             if (string.IsNullOrEmpty(fornecedorDto.Nome)) throw new Exception("Necessário preencher o campo nome");
+            if (string.IsNullOrEmpty(fornecedorDto.CNPJ)) throw new Exception("Necessário preencher o campo CNPJ");
+            if (!Regex.IsMatch(fornecedorDto.CNPJ, @"^\d{2}[.]\d{3}[.]\d{3}[/]\d{4}[-]\d{2}$")) throw new Exception("CNPJ em formato inválido xx.xxx.xxx/xxxx-xx");
+
             if (string.IsNullOrEmpty(fornecedorDto.Telefone)) throw new Exception("Necessário preencher o campo telefone");
             if (!Regex.IsMatch(fornecedorDto.Telefone, @"^\d{6,7}[-]?\d{4}$")) throw new Exception("Telefone em formato inválido    EX:1199999-9999");
             if (string.IsNullOrEmpty(fornecedorDto.Endereco)) throw new Exception("Necessário preencher o campo endereço");
@@ -29,15 +32,20 @@ namespace APIVenda.Aplication
             Fornecedor fornecedor;
             if (fornecedorDto.Id == 0)
             {
-
-                fornecedor = new Fornecedor
+                var cnpj = _fornecedorRepository.ObtemCNPJ(fornecedorDto.CNPJ);
+                if (cnpj == null)
                 {
-                    Nome = fornecedorDto.Nome,
-                    Telefone = fornecedorDto.Telefone,
-                    Endereco = fornecedorDto.Endereco
-                };
+                    fornecedor = new Fornecedor
+                    {
+                        Nome = fornecedorDto.Nome,
+                        Telefone = fornecedorDto.Telefone,
+                        Endereco = fornecedorDto.Endereco,
+                        CNPJ = fornecedorDto.CNPJ
+                    };
+                    fornecedorDto.Id = _fornecedorRepository.AddFornecedor(fornecedor);
+                }
+                else throw new Exception("CNPJ já cadastrado");
 
-                fornecedorDto.Id = _fornecedorRepository.AddFornecedor(fornecedor);
             }
             else
             {

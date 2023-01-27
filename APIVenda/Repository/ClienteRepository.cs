@@ -54,5 +54,11 @@ namespace APIVenda.Repository
                         };
             return query.ToList();
         }
+
+        public Cliente ObtemCPF(string cpf)
+        {
+            var clienteCpf = _context.Clientes.FirstOrDefault(x => x.CPF == cpf);
+            return clienteCpf;
+        }
     }
 }

@@ -24,6 +24,9 @@ namespace APIVenda.Aplication
         public FuncionarioDto SaveFuncionario(FuncionarioDto funcionarioDto)
         {
             if (string.IsNullOrEmpty(funcionarioDto.Nome)) throw new Exception("Necessário preencher o campo nome");
+            if (string.IsNullOrEmpty(funcionarioDto.CPF)) throw new Exception("Necessário preencher o campo CPF");
+            if (!Regex.IsMatch(funcionarioDto.CPF, @"^\d{3}[.]\d{3}[.]\d{3}[-]\d{2}$")) throw new Exception("CPF em formato inválido   EX: xxx.xxx.xxx-xx");
+
             if (string.IsNullOrEmpty(funcionarioDto.Telefone)) throw new Exception("Necessário preencher o campo telefone");
             if (!Regex.IsMatch(funcionarioDto.Telefone, @"^\d{6,7}[-]?\d{4}$")) throw new Exception("Telefone em formato inválido   EX:1199999-9999");
             if (string.IsNullOrEmpty(funcionarioDto.Endereco)) throw new Exception("Necessário preencher o campo endereço");
@@ -32,16 +35,21 @@ namespace APIVenda.Aplication
             Funcionarios funcionario;
             if (funcionarioDto.Id == 0)
             {
-
-                funcionario = new Funcionarios
+                var cpf = _funcionarioRepository.ObtemCpf(funcionarioDto.CPF) ;
+                if (cpf == null)
                 {
-                    Nome = funcionarioDto.Nome,
-                    Telefone = funcionarioDto.Telefone,
-                    Endereco = funcionarioDto.Endereco,
-                    Cargo = (int)funcionarioDto.Cargo
-                };
+                    funcionario = new Funcionarios
+                    {
+                        Nome = funcionarioDto.Nome,
+                        CPF = funcionarioDto.CPF,
+                        Telefone = funcionarioDto.Telefone,
+                        Endereco = funcionarioDto.Endereco,
+                        Cargo = (int)funcionarioDto.Cargo
+                    };
 
-                funcionarioDto.Id = _funcionarioRepository.AddFuncionario(funcionario);
+                    funcionarioDto.Id = _funcionarioRepository.AddFuncionario(funcionario);
+                }
+                else throw new Exception("CPF já cadastrado");
             }
             else
             {
@@ -64,17 +72,17 @@ namespace APIVenda.Aplication
             _funcionarioRepository.Excluir(funcionario);
         }
 
-        public IList<FuncionarioGetDto> ExibeFuncionarios()
+        public IList<ExibeFuncionarioDto> ExibeFuncionarios()
         {
             var funcionarios = _funcionarioRepository.GetFuncionarios();
             return funcionarios;
         }
 
-        public FuncionarioGetDto ExibePorId(int id)
+        public ExibeFuncionarioDto ExibePorId(int id)
         {
             var funcionario = _funcionarioRepository.GetFuncionarioId(id) ?? throw new Exception("Funcionario não encontrado");
             var cargo = new EnumCargoModel();
-            return new FuncionarioGetDto
+            return new ExibeFuncionarioDto
             {
                 Id = funcionario.Id,
                 Nome = funcionario.Nome,

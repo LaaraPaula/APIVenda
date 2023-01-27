@@ -44,10 +44,10 @@ namespace APIVenda.Repository
             _context.SaveChanges();
         }
 
-        public IList<FuncionarioGetDto> GetFuncionarios()
+        public IList<ExibeFuncionarioDto> GetFuncionarios()
         {
             var query = from a in _context.Funcionarios
-                        select new FuncionarioGetDto
+                        select new ExibeFuncionarioDto
                         {
                             Id= a.Id,
                             Nome = a.Nome,
@@ -62,6 +62,12 @@ namespace APIVenda.Repository
         {
             var vendedor = _context.Funcionarios.FirstOrDefault(x => x.Id == id && x.Cargo == (int)EnumCargo.Vendedor);
             return vendedor;
+        }
+
+        public Funcionarios ObtemCpf(string cpf)
+        {
+            var funcionarioCpf = _context.Funcionarios.FirstOrDefault(x => x.CPF == cpf);
+            return funcionarioCpf;
         }
     }
 }

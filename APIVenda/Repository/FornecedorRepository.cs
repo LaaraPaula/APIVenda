@@ -56,5 +56,11 @@ namespace APIVenda.Repository
                         };
             return query.ToList();
         }
+
+        public Fornecedor ObtemCNPJ(string cnpj)
+        {
+            var fornecedorCpf = _context.Fornecedores.FirstOrDefault(x => x.CNPJ == cnpj);
+            return fornecedorCpf;
+        }
     }
 }

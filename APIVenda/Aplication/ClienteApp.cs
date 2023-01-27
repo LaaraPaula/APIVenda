@@ -23,6 +23,9 @@ namespace APIVenda.Aplication
         public ClienteDto SaveClient(ClienteDto clienteDto)
         {
             if (string.IsNullOrEmpty(clienteDto.Nome)) throw new Exception("Necessário preencher o campo nome");
+            if (string.IsNullOrEmpty(clienteDto.CPF)) throw new Exception("Necessário preencher o campo CPF");
+            if (!Regex.IsMatch(clienteDto.CPF, @"^\d{3}[.]\d{3}[.]\d{3}[-]\d{2}$")) throw new Exception("CPF em formato inválido   EX: xxx.xxx.xxx-xx");
+
             if (string.IsNullOrEmpty(clienteDto.Telefone)) throw new Exception("Necessário preencher o campo telefone");
             if (!Regex.IsMatch(clienteDto.Telefone, @"^\d{6,7}[-]?\d{4}$")) throw new Exception("Telefone em formato inválido   EX:1199999-9999");
             if (string.IsNullOrEmpty(clienteDto.Endereco)) throw new Exception("Necessário preencher o campo endereço");
@@ -31,14 +34,19 @@ namespace APIVenda.Aplication
             if (clienteDto.Id == 0)
             {
 
-                cliente = new Cliente
+                var cpf = _clienteRepository.ObtemCPF(clienteDto.CPF);
+                if (cpf == null)
                 {
-                    Nome = clienteDto.Nome,
-                    Telefone = clienteDto.Telefone,
-                    Endereco = clienteDto.Endereco
-                };
-
-                clienteDto.Id = _clienteRepository.AddCliente(cliente);
+                    cliente = new Cliente
+                    {
+                        Nome = clienteDto.Nome,
+                        CPF = clienteDto.CPF,
+                        Telefone = clienteDto.Telefone,
+                        Endereco = clienteDto.Endereco
+                    };
+                    clienteDto.Id = _clienteRepository.AddCliente(cliente);
+                }
+                else throw new Exception("CPF já cadastrado");
             }
             else
             {
