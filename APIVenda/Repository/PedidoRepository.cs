@@ -21,7 +21,7 @@ namespace APIVenda.Repository
         {
             _context.Pedidos.Add(pedido);
             _context.SaveChanges();
-            return pedido.Id;
+            return pedido.Id    ;
         }
 
         public Pedido GetPedidoId(int id)

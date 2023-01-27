@@ -16,21 +16,49 @@ namespace APIVenda.Data.Enum
 
     public class EnumCargoAtributo
     {
+        
+
+    }
+    public class EnumCargoModel
+    {
         public int Id { get; set; }
         public string Nome { get; set; }
 
-    }
-    public static class EnumCargoModel
-    {
-        public static List<EnumCargoAtributo> GetAtributo()
+        public EnumCargoModel GetAtributo(EnumCargo enum1)
         {
-            var cargos = System.Enum.GetValues(typeof(EnumCargo)).Cast<EnumCargo>().Select(e => new EnumCargoAtributo
+            switch(enum1)
             {
-                Id = ((int)e),
-                Nome = e.ToString()
-            });
+                case EnumCargo.Atendente: { Nome = "Atendente"; break; }
+                case EnumCargo.Gerente: { Nome = "Gerente"; break; }
+                case EnumCargo.Vendedor: { Nome = "Vendedor"; break; }
+                case EnumCargo.Chefe: { Nome = "Chefe"; break; }
+                case EnumCargo.Telefonista: { Nome = "Telefonista"; break; }
+                case EnumCargo.GerenteComercial: { Nome = "Gerente Comercial"; break; }
+            }
+            return this;
 
-            return cargos.ToList();
+            
         }
+        public IList<EnumCargoModel> MostraCargos()
+        {
+            return ((IEnumerable<EnumCargo>)System.Enum.GetValues(typeof(EnumCargo))).Select(c => new EnumCargoModel() { Id = (int)c, Nome = GetAtributo(c).Nome }).ToList();
+        }
+
+
+
+
+
+
+
+
+
+        //var cargos = System.Enum.GetValues(typeof(EnumCargo)).Cast<EnumCargo>().Select(e => new EnumCargoAtributo
+        //{
+        //    Id = ((int)e),
+        //    Nome = e.ToString()
+        //});
+        //
+        //return cargos.ToList();
     }
+    
 }

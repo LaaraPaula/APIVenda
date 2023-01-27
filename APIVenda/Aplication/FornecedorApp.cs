@@ -23,7 +23,7 @@ namespace APIVenda.Aplication
         {
             if (string.IsNullOrEmpty(fornecedorDto.Nome)) throw new Exception("Necessário preencher o campo nome");
             if (string.IsNullOrEmpty(fornecedorDto.Telefone)) throw new Exception("Necessário preencher o campo telefone");
-            if (!Regex.IsMatch(fornecedorDto.Telefone, @"^\d{6,7}[-]?\d{4}$")) throw new Exception("Telefone em formato inválido\nEX:1199999-9999");
+            if (!Regex.IsMatch(fornecedorDto.Telefone, @"^\d{6,7}[-]?\d{4}$")) throw new Exception("Telefone em formato inválido    EX:1199999-9999");
             if (string.IsNullOrEmpty(fornecedorDto.Endereco)) throw new Exception("Necessário preencher o campo endereço");
 
             Fornecedor fornecedor;

@@ -38,13 +38,22 @@ namespace APIVenda.Repository
             return produto;
         }
 
-        internal void Excluir(Produto produto)
+        public void AtualizaEstoque(int pedidoId, int produtoId)
+        {
+            var produto = _context.Produtos.FirstOrDefault(x => x.Id == produtoId);
+            var pedido = _context.Pedidos.FirstOrDefault(x => x.Id == pedidoId);
+            var estoque = produto.QuantidadeEstoque - pedido.QuantidadeItens;
+            produto.QuantidadeEstoque = estoque;
+            _context.SaveChanges();
+        }
+
+        public void Excluir(Produto produto)
         {
             _context.Remove(produto);
             _context.SaveChanges();
         }
 
-        internal IList<ProdutoDto> GetProdutos()
+        public IList<ProdutoDto> GetProdutos()
         {
             var query = from a in _context.Produtos
                         select new ProdutoDto
@@ -56,6 +65,16 @@ namespace APIVenda.Repository
                             QuantidadeEstoque = a.QuantidadeEstoque
                         };
             return query.ToList();
+        }
+
+        public void AtualizaEstoqueUpdate(int pedidoId, int produtoId)
+        {
+            var produto = _context.Produtos.FirstOrDefault(x => x.Id == produtoId);
+            var pedido = _context.Pedidos.FirstOrDefault(x => x.Id == pedidoId);
+            var renovaEstoque = produto.QuantidadeEstoque + pedido.QuantidadeItens;
+            var estoque = renovaEstoque - pedido.QuantidadeItens;
+            produto.QuantidadeEstoque = estoque;
+            _context.SaveChanges();
         }
     }
 }

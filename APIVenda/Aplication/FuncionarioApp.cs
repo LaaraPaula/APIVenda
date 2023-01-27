@@ -25,7 +25,7 @@ namespace APIVenda.Aplication
         {
             if (string.IsNullOrEmpty(funcionarioDto.Nome)) throw new Exception("Necessário preencher o campo nome");
             if (string.IsNullOrEmpty(funcionarioDto.Telefone)) throw new Exception("Necessário preencher o campo telefone");
-            if (!Regex.IsMatch(funcionarioDto.Telefone, @"^\d{6,7}[-]?\d{4}$")) throw new Exception("Telefone em formato inválido\nEX:1199999-9999");
+            if (!Regex.IsMatch(funcionarioDto.Telefone, @"^\d{6,7}[-]?\d{4}$")) throw new Exception("Telefone em formato inválido   EX:1199999-9999");
             if (string.IsNullOrEmpty(funcionarioDto.Endereco)) throw new Exception("Necessário preencher o campo endereço");
             if (funcionarioDto.Cargo < 0) throw new Exception("Necessário preencher o campo cargo");
 
@@ -73,17 +73,20 @@ namespace APIVenda.Aplication
         public FuncionarioDto ExibePorId(int id)
         {
             var funcionario = _funcionarioRepository.GetFuncionarioId(id) ?? throw new Exception("Funcionario não encontrado");
-
+            var cargo = new EnumCargoModel().MostraCargos();
             return new FuncionarioDto
             {
+                Id = funcionario.Id,
                 Nome = funcionario.Nome,
-                Telefone = funcionario.Telefone
+                Telefone = funcionario.Telefone,
+                Endereco = funcionario.Endereco,
+                Cargo = (EnumCargo)funcionario.Cargo
             };
         }
 
-        public List<EnumCargoAtributo> GetCargos()
+        public IList<EnumCargoModel> GetCargos()
         {
-            var cargos = EnumCargoModel.GetAtributo();
+            var cargos = new EnumCargoModel().MostraCargos();
 
             return cargos;
 

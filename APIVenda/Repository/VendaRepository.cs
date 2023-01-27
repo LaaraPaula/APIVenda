@@ -95,5 +95,11 @@ namespace APIVenda.Repository
             var vendas = _context.Vendas.Where(p => p.HorarioVenda <= data);
             return (IList<ExibeVendaDto>)vendas;
         }
+
+        public Venda ObterClienteVenda(int id)
+        {
+            var cliente = _context.Vendas.FirstOrDefault(x => x.ClienteId == id);
+            return cliente;
+        }
     }
 }

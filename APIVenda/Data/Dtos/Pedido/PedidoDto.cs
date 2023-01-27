@@ -8,9 +8,9 @@ namespace APIVenda.Data.Dtos.Pedido
         public int Id { get; set; }
         public int VendaId { get; set; }
         public int ProdutoId { get; set; }
-        public int ValorUnitario { get; set; }
+        public decimal ValorUnitario { get; set; }
         public int QuantidadeItens { get; set; }
-        public int ValorTotalPedido { get; set; }
+        public decimal ValorTotalPedido { get; set; }
         
     }
     public class ExibePedidoDto

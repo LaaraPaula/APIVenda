@@ -12,17 +12,19 @@ namespace APIVenda.Aplication
     public class ClienteApp
     {
         private readonly ClienteRepository _clienteRepository;
+        private readonly VendaRepository _vendaRepository;
 
         public ClienteApp(DataContext context)
         {
             _clienteRepository = new ClienteRepository(context);
+            _vendaRepository = new VendaRepository(context);
         }
 
         public ClienteDto SaveClient(ClienteDto clienteDto)
         {
             if (string.IsNullOrEmpty(clienteDto.Nome)) throw new Exception("Necessário preencher o campo nome");
             if (string.IsNullOrEmpty(clienteDto.Telefone)) throw new Exception("Necessário preencher o campo telefone");
-            if (!Regex.IsMatch(clienteDto.Telefone, @"^\d{6,7}[-]?\d{4}$")) throw new Exception("Telefone em formato inválido\nEX:1199999-9999");
+            if (!Regex.IsMatch(clienteDto.Telefone, @"^\d{6,7}[-]?\d{4}$")) throw new Exception("Telefone em formato inválido   EX:1199999-9999");
             if (string.IsNullOrEmpty(clienteDto.Endereco)) throw new Exception("Necessário preencher o campo endereço");
 
             Cliente cliente;
@@ -74,8 +76,9 @@ namespace APIVenda.Aplication
         public void DeletaCliente(int id)
         {
             var cliente = _clienteRepository.GetClienteId(id) ?? throw new Exception("Cliente não encontrado");
-            _clienteRepository.Excluir(cliente);
-
+            var venda = _vendaRepository.ObterClienteVenda(cliente.Id);
+            if (venda == null) _clienteRepository.Excluir(cliente);
+            else throw new Exception("Não é possível excluir o cliente pois ele pertence a uma venda");
         }
     }
 }
