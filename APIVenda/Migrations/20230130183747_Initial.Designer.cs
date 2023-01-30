@@ -9,7 +9,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace APIVenda.Migrations
 {
     [DbContext(typeof(DataContext))]
-    [Migration("20230126131103_Initial")]
+    [Migration("20230130183747_Initial")]
     partial class Initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -24,6 +24,9 @@ namespace APIVenda.Migrations
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
+
+                    b.Property<string>("CPF")
+                        .HasColumnType("text");
 
                     b.Property<string>("Endereco")
                         .IsRequired()
@@ -42,11 +45,41 @@ namespace APIVenda.Migrations
                     b.ToTable("Clientes");
                 });
 
+            modelBuilder.Entity("APIVenda.Models.ControladorEstoque", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("DataEntradaEstoque")
+                        .HasColumnType("datetime");
+
+                    b.Property<int>("FornecedorId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("ProdutoId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("QuantidadeItens")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("FornecedorId");
+
+                    b.HasIndex("ProdutoId");
+
+                    b.ToTable("Estoques");
+                });
+
             modelBuilder.Entity("APIVenda.Models.Fornecedor", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
+
+                    b.Property<string>("CNPJ")
+                        .HasColumnType("text");
 
                     b.Property<string>("Endereco")
                         .IsRequired()
@@ -70,6 +103,9 @@ namespace APIVenda.Migrations
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
+
+                    b.Property<string>("CPF")
+                        .HasColumnType("text");
 
                     b.Property<int>("Cargo")
                         .HasColumnType("int");
@@ -156,11 +192,11 @@ namespace APIVenda.Migrations
                     b.Property<int>("ClienteId")
                         .HasColumnType("int");
 
+                    b.Property<DateTime>("DataVenda")
+                        .HasColumnType("datetime");
+
                     b.Property<int>("FuncionarioId")
                         .HasColumnType("int");
-
-                    b.Property<DateTime>("HorarioVenda")
-                        .HasColumnType("datetime");
 
                     b.Property<decimal>("ValorFinal")
                         .HasColumnType("decimal(18, 2)");
@@ -172,6 +208,21 @@ namespace APIVenda.Migrations
                     b.HasIndex("FuncionarioId");
 
                     b.ToTable("Vendas");
+                });
+
+            modelBuilder.Entity("APIVenda.Models.ControladorEstoque", b =>
+                {
+                    b.HasOne("APIVenda.Models.Fornecedor", "Fornecedor")
+                        .WithMany("Estoques")
+                        .HasForeignKey("FornecedorId");
+
+                    b.HasOne("APIVenda.Models.Produto", "Produto")
+                        .WithMany("Estoques")
+                        .HasForeignKey("ProdutoId");
+
+                    b.Navigation("Fornecedor");
+
+                    b.Navigation("Produto");
                 });
 
             modelBuilder.Entity("APIVenda.Models.Pedido", b =>
@@ -211,6 +262,11 @@ namespace APIVenda.Migrations
                     b.Navigation("Vendas");
                 });
 
+            modelBuilder.Entity("APIVenda.Models.Fornecedor", b =>
+                {
+                    b.Navigation("Estoques");
+                });
+
             modelBuilder.Entity("APIVenda.Models.Funcionarios", b =>
                 {
                     b.Navigation("Vendas");
@@ -218,6 +274,8 @@ namespace APIVenda.Migrations
 
             modelBuilder.Entity("APIVenda.Models.Produto", b =>
                 {
+                    b.Navigation("Estoques");
+
                     b.Navigation("Pedidos");
                 });
 

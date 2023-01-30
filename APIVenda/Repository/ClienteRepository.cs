@@ -48,6 +48,7 @@ namespace APIVenda.Repository
                         select new ClienteDto
                         {
                             Id=a.Id,
+                            CPF=a.CPF,
                             Nome = a.Nome,
                             Telefone = a.Telefone,
                             Endereco = a.Endereco

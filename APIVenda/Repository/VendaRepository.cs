@@ -11,7 +11,7 @@ namespace APIVenda.Repository
     public class VendaRepository
     {
         private DataContext _context;
-
+        private PedidoRepository _pedidoRepository;
         public VendaRepository(DataContext context)
         {
             _context = context;
@@ -58,15 +58,6 @@ namespace APIVenda.Repository
             return venda;
         }
 
-        public decimal SomarPedido(IList<Pedido> pedido)
-        {
-            decimal soma = 0 ;
-            foreach (var item in pedido)
-            {
-                soma += item.ValorTotalPedido;
-            }
-            return soma;
-        }
         public Venda GetVendasId(int id)
         {
             return _context.Vendas.FirstOrDefault(x => x.Id == id);
@@ -79,7 +70,7 @@ namespace APIVenda.Repository
                         on ved.FuncionarioId equals fun.Id
                         join cli in _context.Clientes
                         on ved.ClienteId equals cli.Id
-                        where ved.Id ==id
+                        where ved.Id ==id 
                         select new ExibeVendaDto
                         {
                             ClientePedido = cli.Nome,
@@ -91,15 +82,36 @@ namespace APIVenda.Repository
 
         public IList<ExibeVendaDto> VendaData(int dias)
         {
-            var data = Convert.ToDateTime(dias);
-            var vendas = _context.Vendas.Where(p => p.HorarioVenda <= data);
-            return (IList<ExibeVendaDto>)vendas;
+            var data = DateTime.Now.AddDays(-dias);
+
+
+            var vendas = _context.Vendas.Where(p => p.DataVenda >= data);
+            var query = from ved in _context.Vendas
+                        join fun in _context.Funcionarios
+                        on ved.FuncionarioId equals fun.Id
+                        join cli in _context.Clientes
+                        on ved.ClienteId equals cli.Id
+                        where ved.DataVenda>=data
+                        select new ExibeVendaDto
+                        {
+                            DataVenda = ved.DataVenda,
+                            ClientePedido = cli.Nome,
+                            FuncionarioPedido = fun.Nome,
+                            ValorCompra = ved.ValorFinal
+                        };
+            return query.ToList();
         }
 
         public Venda ObterClienteVenda(int id)
         {
             var cliente = _context.Vendas.FirstOrDefault(x => x.ClienteId == id);
             return cliente;
+        }
+
+        public Venda ObterFuncionarioVenda(int id)
+        {
+            var funcionario = _context.Vendas.FirstOrDefault(x => x.FuncionarioId == id);
+            return funcionario;
         }
     }
 }

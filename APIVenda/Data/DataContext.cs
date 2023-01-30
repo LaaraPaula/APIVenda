@@ -12,6 +12,16 @@ namespace APIVenda.Data
         }
         protected override void OnModelCreating(ModelBuilder builder)
         {
+            builder.Entity<ControladorEstoque>()
+                   .HasOne(controladorEstoque => controladorEstoque.Produto)
+                   .WithMany(produto => produto.Estoques)
+                   .HasForeignKey(controladorEstoque => controladorEstoque.ProdutoId).IsRequired(false);
+
+            builder.Entity<ControladorEstoque>()
+                   .HasOne(controladorEstoque => controladorEstoque.Fornecedor)
+                   .WithMany(produto => produto.Estoques)
+                   .HasForeignKey(controladorEstoque => controladorEstoque.FornecedorId).IsRequired(false);
+
             builder.Entity<Pedido>()
                    .HasOne(pedido => pedido.Produto)
                    .WithMany(produto => produto.Pedidos)
@@ -38,6 +48,7 @@ namespace APIVenda.Data
         public DbSet<Fornecedor> Fornecedores { get; set; }
         public DbSet<Pedido> Pedidos{ get; set; }
         public DbSet<Venda> Vendas { get; set; }
+        public DbSet<ControladorEstoque> Estoques { get; set; }
 
     }
 }

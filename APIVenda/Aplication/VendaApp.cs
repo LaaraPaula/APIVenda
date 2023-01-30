@@ -6,6 +6,7 @@ using APIVenda.Repository;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace APIVenda.Aplication
 {
@@ -26,8 +27,7 @@ namespace APIVenda.Aplication
             if (vendaDto.FuncionarioId <= 0) throw new Exception("Necessário preencher o campo VendedorId");
             if (vendaDto.ClienteId <= 0) throw new Exception("Necessário preencher o campo ClienteId");
 
-            var pedido = _pedidoRepository.GetPedidosVenda(vendaDto.Id) ?? throw new Exception("Pedidos não encontrados para esta venda");
-            var funciorio = _funcionarioRepository.GetVendedor(vendaDto.FuncionarioId) ?? throw new Exception("Vendedor não encontrado");
+            _ = _funcionarioRepository.GetVendedor(vendaDto.FuncionarioId) ?? throw new Exception("Vendedor não encontrado");
             Venda venda;
             if (vendaDto.Id == 0)
             {
@@ -36,10 +36,9 @@ namespace APIVenda.Aplication
                 {
                     FuncionarioId = vendaDto.FuncionarioId,
                     ClienteId = vendaDto.ClienteId,
-                    HorarioVenda = DateTime.Now,
-                    ValorFinal = _vendaRepository.SomarPedido(pedido)
+                    DataVenda = DateTime.Now
                 };
-                vendaDto.Id = _vendaRepository.AddVenda(venda);
+                vendaDto.Id = _vendaRepository.AddVenda(venda); 
                 
             }
             else
@@ -48,7 +47,6 @@ namespace APIVenda.Aplication
 
                 venda.FuncionarioId = vendaDto.FuncionarioId;
                 venda.ClienteId = vendaDto.ClienteId;
-                venda.ValorFinal = _vendaRepository.SomarPedido(pedido);
 
                 _vendaRepository.UpdateVenda(venda);
             }
@@ -56,16 +54,19 @@ namespace APIVenda.Aplication
             return vendaDto;
         }
 
-        public void DeletaVenda(int id)
+        public int DeletaVenda(int id)
         {
             var venda = _vendaRepository.GetVendaId(id) ?? throw new Exception("Venda não encontrada");
+            var vendaId = venda.Id;
             _vendaRepository.Excluir(venda);
+            return vendaId;
         }
 
         public ExibeVendaDto ExibePorId(int id)
         {
             var venda = _vendaRepository.GetVendaId(id) ?? throw new Exception("Venda não encontrado");
 
+                        
             return _vendaRepository.ExibeVenda(id);
         }
 
@@ -79,6 +80,11 @@ namespace APIVenda.Aplication
         {
             var vendas = _vendaRepository.VendaData(dias);
             return vendas;
+        }
+
+        private decimal CalcularValorVenda(IList<Pedido> pedidos)
+        {
+            return pedidos.Sum(x => x.ValorTotalPedido);
         }
     }
 }

@@ -13,10 +13,12 @@ namespace APIVenda.Aplication
     public class FornecedorApp
     {
         private readonly FornecedorRepository _fornecedorRepository;
+        private readonly ControleEstoqueRepository _controleEstoqueRepository;
 
         public FornecedorApp(DataContext context)
         {
             _fornecedorRepository = new FornecedorRepository(context);
+            _controleEstoqueRepository = new ControleEstoqueRepository(context);
         }
 
         public FornecedorDto SaveFornecedor(FornecedorDto fornecedorDto)
@@ -61,10 +63,16 @@ namespace APIVenda.Aplication
             return fornecedorDto;
         }
 
-        public void DeletaFornecedor(int id)
+        public string DeletaFornecedor(int id)
         {
-            var cliente = _fornecedorRepository.GetFornecedorId(id) ?? throw new Exception("Fornecedor não encontrado");
-            _fornecedorRepository.Excluir(cliente);
+            var fornecedor = _fornecedorRepository.GetFornecedorId(id) ?? throw new Exception("Fornecedor não encontrado");
+            var estoque = _controleEstoqueRepository.GetFornecedorEstoque(fornecedor.Id);
+
+            if (estoque != null) throw new Exception("Não é possível deletar fornecedor cadastrado em estoque");
+
+            var nome = fornecedor.Nome;
+            _fornecedorRepository.Excluir(fornecedor);
+            return nome;
         }
 
         public IList<FornecedorDto> ExibeFornecedores()
@@ -82,7 +90,8 @@ namespace APIVenda.Aplication
                 Id = fornecedor.Id,
                 Endereco = fornecedor.Endereco,
                 Nome = fornecedor.Nome,
-                Telefone = fornecedor.Telefone
+                Telefone = fornecedor.Telefone,
+                CNPJ = fornecedor.CNPJ
             };
         }
     }

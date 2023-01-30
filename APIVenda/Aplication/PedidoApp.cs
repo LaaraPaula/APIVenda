@@ -33,48 +33,48 @@ namespace APIVenda.Aplication
 
             var venda = _vendaRepository.GetVendaId(pedidoDto.VendaId) ?? throw new Exception("Venda não encontrada");
 
-            pedidoDto.ValorTotalPedido = pedidoDto.QuantidadeItens * produto.PrecoUnitario;
-            pedidoDto.ValorUnitario = produto.PrecoUnitario;
-
             Pedido pedido;
             if (pedidoDto.Id == 0)
             {
-
-                
                 pedido = new Pedido
                 {
                     ProdutoId = pedidoDto.ProdutoId,
                     VendaId = pedidoDto.VendaId,
                     ValorUnitario = produto.PrecoUnitario,
                     QuantidadeItens = pedidoDto.QuantidadeItens,
-                    ValorTotalPedido = pedidoDto.ValorTotalPedido
+                    ValorTotalPedido = pedidoDto.QuantidadeItens * produto.PrecoUnitario
                 };
                 pedidoDto.Id = _pedidoRepository.AddPedido(pedido);
 
+                venda.ValorFinal += pedido.ValorTotalPedido;
                 _produtoRepository.AtualizaEstoque(pedidoDto.Id, produto.Id);
             }
             else
             {
                 pedido = _pedidoRepository.GetPedidoId(pedidoDto.Id) ?? throw new Exception("Pedido não encontrado");
+                venda.ValorFinal -= pedido.ValorTotalPedido;
 
                 _produtoRepository.AtualizaEstoqueUpdate(pedido.Id, produto.Id);
 
                 pedido.ProdutoId = pedidoDto.ProdutoId;
                 pedido.ValorUnitario = produto.PrecoUnitario;
                 pedido.QuantidadeItens = pedidoDto.QuantidadeItens;
-                pedido.ValorTotalPedido = pedidoDto.ValorTotalPedido;
+                pedido.ValorTotalPedido = pedidoDto.QuantidadeItens * produto.PrecoUnitario;
 
                 _pedidoRepository.UpdatePedido(pedido);
+                venda.ValorFinal += pedido.ValorTotalPedido;
                 _produtoRepository.AtualizaEstoque(pedidoDto.Id, produto.Id);
             }
 
             return pedidoDto;
         }
 
-        public void DeletaPedido(int id)
+        public int DeletaPedido(int id)
         {
             var pedido = _pedidoRepository.GetPedidoId(id) ?? throw new Exception("Pedido não encontrado");
+            var pedidoId = pedido.Id;
             _pedidoRepository.Excluir(pedido);
+            return pedidoId;
         }
 
         public IList<ExibePedidoDto> ExibePedidos()

@@ -52,7 +52,8 @@ namespace APIVenda.Repository
                             Id = a.Id,
                             Nome = a.Nome,
                             Telefone = a.Telefone,
-                            Endereco = a.Endereco
+                            Endereco = a.Endereco,
+                            CNPJ=a.CNPJ
                         };
             return query.ToList();
         }

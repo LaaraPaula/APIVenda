@@ -14,5 +14,6 @@ namespace APIVenda.Models
         public int QuantidadeEstoque { get; set; }
         public int PedidoId { get; set; }
         public virtual List<Pedido> Pedidos { get; set; }
+        public virtual List<ControladorEstoque> Estoques { get; set; }
     }
 }

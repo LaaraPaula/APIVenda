@@ -15,10 +15,12 @@ namespace APIVenda.Aplication
     public class FuncionarioApp
     {
         private readonly FuncionarioRepository _funcionarioRepository;
+        private readonly VendaRepository _vendaRepository;
 
         public FuncionarioApp(DataContext context)
         {
             _funcionarioRepository = new FuncionarioRepository(context);
+            _vendaRepository = new VendaRepository(context);
         }
 
         public FuncionarioDto SaveFuncionario(FuncionarioDto funcionarioDto)
@@ -66,10 +68,15 @@ namespace APIVenda.Aplication
             return funcionarioDto;
         }
 
-        public void DeletaFuncionario(int id)
+        public string DeletaFuncionario(int id)
         {
             var funcionario = _funcionarioRepository.GetFuncionarioId(id) ?? throw new Exception("Funcionario não encontrado");
+            var venda = _vendaRepository.ObterFuncionarioVenda(funcionario.Id);
+            if (venda != null) throw new Exception("Não é possivel apagar Vendedor cadastrado em uma venda");
+
+            var nome = funcionario.Nome;
             _funcionarioRepository.Excluir(funcionario);
+            return nome;
         }
 
         public IList<ExibeFuncionarioDto> ExibeFuncionarios()

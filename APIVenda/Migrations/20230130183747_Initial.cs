@@ -14,6 +14,7 @@ namespace APIVenda.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("MySQL:ValueGenerationStrategy", MySQLValueGenerationStrategy.IdentityColumn),
+                    CPF = table.Column<string>(type: "text", nullable: true),
                     Nome = table.Column<string>(type: "text", nullable: false),
                     Telefone = table.Column<string>(type: "text", nullable: false),
                     Endereco = table.Column<string>(type: "text", nullable: false)
@@ -29,6 +30,7 @@ namespace APIVenda.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("MySQL:ValueGenerationStrategy", MySQLValueGenerationStrategy.IdentityColumn),
+                    CNPJ = table.Column<string>(type: "text", nullable: true),
                     Nome = table.Column<string>(type: "text", nullable: false),
                     Telefone = table.Column<string>(type: "text", nullable: false),
                     Endereco = table.Column<string>(type: "text", nullable: false)
@@ -45,6 +47,7 @@ namespace APIVenda.Migrations
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("MySQL:ValueGenerationStrategy", MySQLValueGenerationStrategy.IdentityColumn),
                     Cargo = table.Column<int>(type: "int", nullable: false),
+                    CPF = table.Column<string>(type: "text", nullable: true),
                     Nome = table.Column<string>(type: "text", nullable: false),
                     Telefone = table.Column<string>(type: "text", nullable: false),
                     Endereco = table.Column<string>(type: "text", nullable: false)
@@ -78,7 +81,7 @@ namespace APIVenda.Migrations
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("MySQL:ValueGenerationStrategy", MySQLValueGenerationStrategy.IdentityColumn),
                     ValorFinal = table.Column<decimal>(type: "decimal(18, 2)", nullable: false),
-                    HorarioVenda = table.Column<DateTime>(type: "datetime", nullable: false),
+                    DataVenda = table.Column<DateTime>(type: "datetime", nullable: false),
                     FuncionarioId = table.Column<int>(type: "int", nullable: false),
                     ClienteId = table.Column<int>(type: "int", nullable: false)
                 },
@@ -95,6 +98,34 @@ namespace APIVenda.Migrations
                         name: "FK_Vendas_Funcionarios_FuncionarioId",
                         column: x => x.FuncionarioId,
                         principalTable: "Funcionarios",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Estoques",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("MySQL:ValueGenerationStrategy", MySQLValueGenerationStrategy.IdentityColumn),
+                    ProdutoId = table.Column<int>(type: "int", nullable: false),
+                    FornecedorId = table.Column<int>(type: "int", nullable: false),
+                    QuantidadeItens = table.Column<int>(type: "int", nullable: false),
+                    DataEntradaEstoque = table.Column<DateTime>(type: "datetime", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Estoques", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Estoques_Fornecedores_FornecedorId",
+                        column: x => x.FornecedorId,
+                        principalTable: "Fornecedores",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_Estoques_Produtos_ProdutoId",
+                        column: x => x.ProdutoId,
+                        principalTable: "Produtos",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
                 });
@@ -129,6 +160,16 @@ namespace APIVenda.Migrations
                 });
 
             migrationBuilder.CreateIndex(
+                name: "IX_Estoques_FornecedorId",
+                table: "Estoques",
+                column: "FornecedorId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Estoques_ProdutoId",
+                table: "Estoques",
+                column: "ProdutoId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Pedidos_ProdutoId",
                 table: "Pedidos",
                 column: "ProdutoId");
@@ -152,10 +193,13 @@ namespace APIVenda.Migrations
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
-                name: "Fornecedores");
+                name: "Estoques");
 
             migrationBuilder.DropTable(
                 name: "Pedidos");
+
+            migrationBuilder.DropTable(
+                name: "Fornecedores");
 
             migrationBuilder.DropTable(
                 name: "Produtos");

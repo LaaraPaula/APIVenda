@@ -78,5 +78,11 @@ namespace APIVenda.Repository
            var pedidosVenda = _context.Pedidos.Where(x => x.VendaId == id);
             return pedidosVenda.ToList();
         }
+
+        public Pedido ObterPedidoProduto(int id)
+        {
+            var pedido = _context.Pedidos.FirstOrDefault(x => x.ProdutoId == id);
+            return pedido;
+        }
     }
 }

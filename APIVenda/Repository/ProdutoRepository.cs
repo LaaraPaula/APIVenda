@@ -72,8 +72,7 @@ namespace APIVenda.Repository
             var produto = _context.Produtos.FirstOrDefault(x => x.Id == produtoId);
             var pedido = _context.Pedidos.FirstOrDefault(x => x.Id == pedidoId);
             var renovaEstoque = produto.QuantidadeEstoque + pedido.QuantidadeItens;
-            var estoque = renovaEstoque - pedido.QuantidadeItens;
-            produto.QuantidadeEstoque = estoque;
+            produto.QuantidadeEstoque = renovaEstoque;
             _context.SaveChanges();
         }
     }

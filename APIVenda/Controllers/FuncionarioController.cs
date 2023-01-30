@@ -24,6 +24,18 @@ namespace APIVenda.Controllers
         {
             _funcionarioApp = new FuncionarioApp(context);
         }
+        [HttpGet("ObterCargos")]
+        public IActionResult ObterCargos()
+        {
+            try
+            {
+                return Ok(_funcionarioApp.GetCargos());
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
         [HttpPost("SaveFuncionario")]
         public IActionResult SaveFuncionario(FuncionarioDto funcionarioDto)
         {
@@ -72,8 +84,8 @@ namespace APIVenda.Controllers
         {
             try
             {
-                _funcionarioApp.DeletaFuncionario(id);
-                return Ok("FUNCIONARIO deletado!");
+                var funcionario = _funcionarioApp.DeletaFuncionario(id);
+                return Ok($"FUNCIONARIO {funcionario} deletado!");
             }
             catch (Exception ex)
             {
@@ -81,17 +93,6 @@ namespace APIVenda.Controllers
             }
 
         }
-        [HttpGet("ObterCargos")]
-        public IActionResult ObterCargos()
-        {
-            try
-            {
-                return Ok(_funcionarioApp.GetCargos());
-            }
-            catch(Exception ex)
-            {
-                return BadRequest(ex.Message);
-            }
-        }
+        
     }
 }

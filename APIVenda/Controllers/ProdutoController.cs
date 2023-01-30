@@ -9,6 +9,7 @@ using System.Linq;
 using APIVenda.Aplication;
 using APIVenda.Data.Dtos.Cliente;
 using System;
+using APIVenda.Data.Dtos.Estoque;
 
 namespace APIVenda.Controllers
 {
@@ -33,6 +34,19 @@ namespace APIVenda.Controllers
             }
 
             catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+        [HttpPost("AtualizaEstoque")]
+        public IActionResult AtualizaEstoque(EstoqueDto estoque)
+        {
+            try
+            {
+                var produto = _produtoApp.AtualizaEstoque(estoque);
+                return Ok(produto);
+            }
+            catch(Exception ex)
             {
                 return BadRequest(ex.Message);
             }
@@ -70,8 +84,8 @@ namespace APIVenda.Controllers
         {
             try
             {
-                _produtoApp.DeletaProduto(id);
-                return Ok("PRODUTO deletado!");
+                var deletado = _produtoApp.DeletaProduto(id);
+                return Ok($"PRODUTO {deletado} deletado!");
             }
             catch (Exception ex)
             {

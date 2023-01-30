@@ -70,8 +70,8 @@ namespace APIVenda.Controllers
         {
             try
             {
-                _clienteApp.DeletaCliente(id);
-                return Ok("CLIENTE deletado!");
+                var cliente = _clienteApp.DeletaCliente(id);
+                return Ok($"CLIENTE {cliente} deletado!");
             }
             catch(Exception ex)
             {

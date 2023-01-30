@@ -75,18 +75,22 @@ namespace APIVenda.Aplication
             return new ClienteDto
             {
                 Id = cliente.Id,
+                CPF = cliente.CPF,
                 Endereco = cliente.Endereco,
                 Nome = cliente.Nome,
                 Telefone = cliente.Telefone
             };
         }
 
-        public void DeletaCliente(int id)
+        public string DeletaCliente(int id)
         {
             var cliente = _clienteRepository.GetClienteId(id) ?? throw new Exception("Cliente não encontrado");
             var venda = _vendaRepository.ObterClienteVenda(cliente.Id);
-            if (venda == null) _clienteRepository.Excluir(cliente);
-            else throw new Exception("Não é possível excluir o cliente pois ele pertence a uma venda");
+
+            if (venda != null) throw new Exception("Não é possível excluir o cliente pois ele pertence a uma venda");
+            var nome = cliente.Nome;
+            _clienteRepository.Excluir(cliente);
+            return nome;
         }
     }
 }
