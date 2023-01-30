@@ -1,7 +1,4 @@
-﻿using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-
-namespace APIVenda.Data.Dtos.Pedido
+﻿namespace APIVenda.Data.Dtos.Pedido
 {
     public class PedidoDto
     {

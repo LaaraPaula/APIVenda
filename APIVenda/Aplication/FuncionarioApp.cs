@@ -3,12 +3,10 @@ using APIVenda.Models;
 using APIVenda.Repository;
 using System;
 using APIVenda.Data.Dtos.Funcionario;
-using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using APIVenda.Data.Enum;
 using System.Text.RegularExpressions;
-using APIVenda.Data.Dtos.Cliente;
 
 namespace APIVenda.Aplication
 {

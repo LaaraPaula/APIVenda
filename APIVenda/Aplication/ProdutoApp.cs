@@ -1,10 +1,8 @@
-﻿using APIVenda.Data.Dtos.Cliente;
-using APIVenda.Data;
+﻿using APIVenda.Data;
 using APIVenda.Models;
 using APIVenda.Repository;
 using System;
 using APIVenda.Data.Dtos.Produto;
-using System.Collections;
 using System.Collections.Generic;
 using APIVenda.Data.Dtos.Estoque;
 

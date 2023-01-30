@@ -3,10 +3,8 @@ using APIVenda.Models;
 using APIVenda.Repository;
 using System;
 using APIVenda.Data.Dtos.Fornecedor;
-using System.Collections;
 using System.Collections.Generic;
 using System.Text.RegularExpressions;
-using APIVenda.Data.Dtos.Cliente;
 
 namespace APIVenda.Aplication
 {

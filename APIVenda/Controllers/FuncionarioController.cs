@@ -1,16 +1,8 @@
-﻿
-using APIVenda.Data;
-using APIVenda.Models;
+﻿using APIVenda.Data;
 using APIVenda.Data.Dtos.Funcionario;
-using APIVenda.Data.Dtos.Produto;
-using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
-using System.Collections.Generic;
-using System.Linq;
 using APIVenda.Aplication;
-using APIVenda.Data.Dtos.Cliente;
 using System;
-using APIVenda.Data.Enum;
 
 namespace APIVenda.Controllers
 {

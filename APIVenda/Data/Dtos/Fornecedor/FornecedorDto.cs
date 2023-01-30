@@ -1,6 +1,4 @@
-﻿using System.ComponentModel.DataAnnotations;
-
-namespace APIVenda.Data.Dtos.Fornecedor
+﻿namespace APIVenda.Data.Dtos.Fornecedor
 {
     public class FornecedorDto
     {

@@ -2,7 +2,6 @@
 using APIVenda.Data.Dtos.Cliente;
 using APIVenda.Models;
 using APIVenda.Repository;
-using AutoMapper;
 using System;
 using System.Collections.Generic;
 using System.Text.RegularExpressions;

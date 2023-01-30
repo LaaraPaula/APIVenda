@@ -1,13 +1,7 @@
-﻿using APIVenda.Models;
-using APIVenda.Data;
+﻿using APIVenda.Data;
 using APIVenda.Data.Dtos.Produto;
-using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Filters;
-using System.Collections.Generic;
-using System.Linq;
 using APIVenda.Aplication;
-using APIVenda.Data.Dtos.Cliente;
 using System;
 using APIVenda.Data.Dtos.Estoque;
 

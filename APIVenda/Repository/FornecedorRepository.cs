@@ -1,9 +1,6 @@
 ﻿using APIVenda.Data;
-using APIVenda.Data.Dtos.Cliente;
 using APIVenda.Data.Dtos.Fornecedor;
 using APIVenda.Models;
-using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 

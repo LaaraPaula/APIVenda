@@ -1,6 +1,4 @@
-﻿using System.ComponentModel.DataAnnotations;
-
-namespace APIVenda.Data.Dtos.Produto
+﻿namespace APIVenda.Data.Dtos.Produto
 {
     public class ProdutoDto
     {

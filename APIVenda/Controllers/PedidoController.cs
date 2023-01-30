@@ -1,12 +1,8 @@
 ﻿using APIVenda.Aplication;
 using APIVenda.Data;
 using APIVenda.Data.Dtos.Pedido;
-using APIVenda.Models;
-using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
 using System;
-using System.Collections.Generic;
-using System.Linq;
 
 namespace APIVenda.Controllers
 {

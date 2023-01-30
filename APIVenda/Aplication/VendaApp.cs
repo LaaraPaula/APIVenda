@@ -1,9 +1,7 @@
 ﻿using APIVenda.Data;
-using APIVenda.Data.Dtos.Pedido;
 using APIVenda.Data.Dtos.Venda;
 using APIVenda.Models;
 using APIVenda.Repository;
-using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
 using System.Linq;

@@ -1,12 +1,9 @@
 ﻿using APIVenda.Data;
-using APIVenda.Data.Dtos.Cliente;
 using APIVenda.Data.Dtos.Pedido;
 using APIVenda.Models;
 using APIVenda.Repository;
 using System;
-using System.Collections;
 using System.Collections.Generic;
-using System.Text.RegularExpressions;
 
 namespace APIVenda.Aplication
 {

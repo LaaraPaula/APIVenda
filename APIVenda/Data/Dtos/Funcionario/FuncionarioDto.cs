@@ -1,5 +1,4 @@
 ﻿using APIVenda.Data.Enum;
-using System.ComponentModel.DataAnnotations;
 
 namespace APIVenda.Data.Dtos.Funcionario
 {

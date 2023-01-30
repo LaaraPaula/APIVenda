@@ -1,5 +1,4 @@
 ﻿using APIVenda.Data;
-using APIVenda.Data.Dtos.Pedido;
 using APIVenda.Data.Dtos.Venda;
 using APIVenda.Models;
 using System;

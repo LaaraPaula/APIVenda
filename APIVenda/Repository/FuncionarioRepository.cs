@@ -1,10 +1,7 @@
 ﻿using APIVenda.Data;
-using APIVenda.Data.Dtos.Cliente;
 using APIVenda.Data.Dtos.Funcionario;
 using APIVenda.Data.Enum;
 using APIVenda.Models;
-using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 
