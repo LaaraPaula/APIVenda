@@ -83,9 +83,9 @@ namespace APIVenda.Aplication
             };
         }
 
-        public IList<ProdutoDto> ExibeProdutos()
+        public IList<ProdutoDto> ExibeProdutos(string nome)
         {
-            var produto = _produtoRepository.GetProdutos();
+            var produto = _produtoRepository.GetProdutos(nome);
             return produto;
         }
 

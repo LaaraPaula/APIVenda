@@ -33,11 +33,12 @@ namespace APIVenda.Controllers
         }
 
         [HttpGet("ExibeFornecedores")]
-        public IActionResult ExibeFornecedores()
+        public IActionResult ExibeFornecedores(string nome)
         {
             try
             {
-                return Ok(_fornecedorApp.ExibeFornecedores());
+                var fornecedor = _fornecedorApp.ExibeFornecedores(nome);
+                return Ok(fornecedor);
 
             }
             catch (Exception ex)

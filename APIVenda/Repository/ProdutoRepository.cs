@@ -50,7 +50,7 @@ namespace APIVenda.Repository
             _context.SaveChanges();
         }
 
-        public IList<ProdutoDto> GetProdutos()
+        public IList<ProdutoDto> GetProdutos(string nome)
         {
             var query = from a in _context.Produtos
                         select new ProdutoDto
@@ -61,6 +61,7 @@ namespace APIVenda.Repository
                             PrecoUnitario = a.PrecoUnitario,
                             QuantidadeEstoque = a.QuantidadeEstoque
                         };
+            if (!string.IsNullOrEmpty(nome)) query = query.Where(x => x.Nome.Contains(nome));
             return query.ToList();
         }
 

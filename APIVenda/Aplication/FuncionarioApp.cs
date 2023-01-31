@@ -77,9 +77,9 @@ namespace APIVenda.Aplication
             return nome;
         }
 
-        public IList<ExibeFuncionarioDto> ExibeFuncionarios()
+        public IList<ExibeFuncionarioDto> ExibeFuncionarios(string nome)
         {
-            var funcionarios = _funcionarioRepository.GetFuncionarios();
+            var funcionarios = _funcionarioRepository.GetFuncionarios(nome);
             return funcionarios;
         }
 

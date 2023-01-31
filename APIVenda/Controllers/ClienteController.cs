@@ -34,11 +34,12 @@ namespace APIVenda.Controllers
             }
         }
         [HttpGet("ExibeClientes")]
-        public IActionResult ExibeClientes()
+        public IActionResult ExibeClientes(string nome)
         {
             try
             {
-                return Ok(_clienteApp.ExibeClientes()); 
+                var clientes = _clienteApp.ExibeClientes(nome);
+                return Ok(clientes); 
 
             }
             catch(Exception ex)

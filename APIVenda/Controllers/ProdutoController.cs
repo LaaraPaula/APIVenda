@@ -46,11 +46,12 @@ namespace APIVenda.Controllers
             }
         }
         [HttpGet("ExibeProdutos")]
-        public IActionResult ExibeProdutos()
+        public IActionResult ExibeProdutos(string nome)
         {
             try
             {
-                return Ok(_produtoApp.ExibeProdutos());
+                var produto = _produtoApp.ExibeProdutos(nome);
+                return Ok(produto);
 
             }
             catch (Exception ex)

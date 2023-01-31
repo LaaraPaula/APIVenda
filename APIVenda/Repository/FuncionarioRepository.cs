@@ -41,7 +41,7 @@ namespace APIVenda.Repository
             _context.SaveChanges();
         }
 
-        public IList<ExibeFuncionarioDto> GetFuncionarios()
+        public IList<ExibeFuncionarioDto> GetFuncionarios(string nome)
         {
             var query = from a in _context.Funcionarios
                         select new ExibeFuncionarioDto
@@ -52,9 +52,9 @@ namespace APIVenda.Repository
                             Telefone = a.Telefone,
                             Endereco=a.Endereco
                         };
+            if (!string.IsNullOrEmpty(nome)) query = query.Where(x => x.Nome.Contains(nome));
             return query.ToList();
         }
-
         public Funcionarios GetVendedor(int id)
         {
             var vendedor = _context.Funcionarios.FirstOrDefault(x => x.Id == id && x.Cargo == (int)EnumCargo.Vendedor);

@@ -73,9 +73,9 @@ namespace APIVenda.Aplication
             return nome;
         }
 
-        public IList<FornecedorDto> ExibeFornecedores()
+        public IList<FornecedorDto> ExibeFornecedores(string nome)
         {
-            var fornecedor = _fornecedorRepository.GetFornecedores();
+            var fornecedor = _fornecedorRepository.GetFornecedores(nome);
             return fornecedor;
         }
 

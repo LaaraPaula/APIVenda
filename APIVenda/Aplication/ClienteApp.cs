@@ -61,9 +61,9 @@ namespace APIVenda.Aplication
             return clienteDto;
         }
 
-        public IList<ClienteDto> ExibeClientes()
+        public IList<ClienteDto> ExibeClientes(string nome)
         {
-            var clientes = _clienteRepository.GetClientes();
+            var clientes = _clienteRepository.GetClientes(nome);
             return clientes;
         }
 

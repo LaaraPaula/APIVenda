@@ -17,7 +17,7 @@ namespace APIVenda.Controllers
             _funcionarioApp = new FuncionarioApp(context);
         }
         [HttpGet("ObterCargos")]
-        public IActionResult ObterCargos()
+        public IActionResult ObterCargos(string nome)
         {
             try
             {
@@ -44,11 +44,12 @@ namespace APIVenda.Controllers
             }
         }
         [HttpGet("ExibeFuncionarios")]
-        public IActionResult ExibeFuncionarios()
+        public IActionResult ExibeFuncionarios(string nome)
         {
             try
             {
-                return Ok(_funcionarioApp.ExibeFuncionarios());
+                var funcionario = _funcionarioApp.ExibeFuncionarios(nome);
+                return Ok(funcionario);
 
             }
             catch (Exception ex)

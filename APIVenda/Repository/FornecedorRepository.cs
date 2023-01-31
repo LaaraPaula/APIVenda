@@ -1,4 +1,5 @@
-﻿using APIVenda.Data;
+﻿using APIVenda.Aplication;
+using APIVenda.Data;
 using APIVenda.Data.Dtos.Fornecedor;
 using APIVenda.Models;
 using System.Collections.Generic;
@@ -41,7 +42,7 @@ namespace APIVenda.Repository
             _context.SaveChanges();
         }
 
-        public IList<FornecedorDto> GetFornecedores()
+        public IList<FornecedorDto> GetFornecedores(string nome)
         {
             var query = from a in _context.Fornecedores
                         select new FornecedorDto
@@ -52,6 +53,7 @@ namespace APIVenda.Repository
                             Endereco = a.Endereco,
                             CNPJ=a.CNPJ
                         };
+            if (!string.IsNullOrEmpty(nome)) query = query.Where(x => x.Nome.Contains(nome));
             return query.ToList();
         }
 

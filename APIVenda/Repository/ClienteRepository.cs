@@ -40,7 +40,7 @@ namespace APIVenda.Repository
             _context.SaveChanges();
         }
 
-        public IList<ClienteDto> GetClientes()
+        public IList<ClienteDto> GetClientes(string nome)
         {
             var query = from a in _context.Clientes
                         select new ClienteDto
@@ -51,6 +51,7 @@ namespace APIVenda.Repository
                             Telefone = a.Telefone,
                             Endereco = a.Endereco
                         };
+            if (!string.IsNullOrEmpty(nome)) query = query.Where(x => x.Nome.Contains(nome));
             return query.ToList();
         }
 
