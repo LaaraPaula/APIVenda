@@ -6,19 +6,14 @@ namespace APIVenda.Data.Enum
 {
     public enum EnumCargo
     {
-        Chefe = 1, 
-        Gerente = 2, 
-        Vendedor = 3, 
-        Atendente = 4, 
+        Chefe = 1,
+        Gerente = 2,
+        Vendedor = 3,
+        Atendente = 4,
         Telefonista = 5,
         GerenteComercial = 6
     }
 
-    public class EnumCargoAtributo
-    {
-        
-
-    }
     public class EnumCargoModel
     {
         public int Id { get; set; }
@@ -26,7 +21,7 @@ namespace APIVenda.Data.Enum
 
         public EnumCargoModel GetAtributo(EnumCargo enum1)
         {
-            switch(enum1)
+            switch (enum1)
             {
                 case EnumCargo.Atendente: { Nome = "Atendente"; break; }
                 case EnumCargo.Gerente: { Nome = "Gerente"; break; }
@@ -37,29 +32,10 @@ namespace APIVenda.Data.Enum
                 default: return null;
             }
             return this;
-
-            
         }
         public IList<EnumCargoModel> MostraCargos()
         {
             return ((IEnumerable<EnumCargo>)System.Enum.GetValues(typeof(EnumCargo))).Select(c => new EnumCargoModel() { Id = (int)c, Nome = GetAtributo(c).Nome }).ToList();
         }
-
-
-
-
-
-
-
-
-
-        //var cargos = System.Enum.GetValues(typeof(EnumCargo)).Cast<EnumCargo>().Select(e => new EnumCargoAtributo
-        //{
-        //    Id = ((int)e),
-        //    Nome = e.ToString()
-        //});
-        //
-        //return cargos.ToList();
     }
-    
 }
