@@ -11,7 +11,6 @@ namespace APIVenda.Models
         public string Descricao { get; set; }
         public decimal  PrecoUnitario { get; set; }
         public int QuantidadeEstoque { get; set; }
-        public int PedidoId { get; set; }
         public virtual List<Pedido> Pedidos { get; set; }
         public virtual List<ControladorEstoque> Estoques { get; set; }
     }

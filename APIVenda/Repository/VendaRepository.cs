@@ -43,6 +43,7 @@ namespace APIVenda.Repository
                         on ved.ClienteId equals cli.Id
                         select new ExibeVendaDto
                         {
+                            Id = ved.Id,
                             ClientePedido = cli.Nome,
                             FuncionarioPedido = fun.Nome,
                             ValorCompra = ved.ValorFinal
