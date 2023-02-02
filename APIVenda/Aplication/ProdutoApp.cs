@@ -5,6 +5,8 @@ using System;
 using APIVenda.Data.Dtos.Produto;
 using System.Collections.Generic;
 using APIVenda.Data.Dtos.Estoque;
+using APIVenda.Data.Dtos.Cliente;
+using APIVenda.Utilitarios;
 
 namespace APIVenda.Aplication
 {
@@ -25,8 +27,8 @@ namespace APIVenda.Aplication
 
         public ProdutoDto SaveProduto(ProdutoDto produtoDto)
         {
-            if (string.IsNullOrEmpty(produtoDto.Nome)) throw new Exception("Necessário preencher o campo nome");
-            if (string.IsNullOrEmpty(produtoDto.Descricao)) throw new Exception("Necessário preencher o campo descrição");
+            Validacoes.ValidarCampo(produtoDto.Nome, "nome");
+            Validacoes.ValidarCampo(produtoDto.Descricao, "descrição");
             if (produtoDto.PrecoUnitario<=0) throw new Exception("Campo PreçoUnitario deve ser preenchido com valor maior que '0' ");
             
 
@@ -43,24 +45,25 @@ namespace APIVenda.Aplication
                 };
 
                 produtoDto.Id = _produtoRepository.AddProduto(produto);
+                return produtoDto;
             }
-            else
-            {
-                produto = _produtoRepository.GetProdutoId(produtoDto.Id) ?? throw new Exception("Produto não encontrado");
+            produto = _produtoRepository.GetProdutoId(produtoDto.Id);
+            Validacoes.ValidaPesquisa(produto, "Produto");
 
-                produto.Nome = produtoDto.Nome;
-                produto.Descricao = produtoDto.Descricao;
-                produto.PrecoUnitario = produtoDto.PrecoUnitario;
+            produto.Nome = produtoDto.Nome;
+            produto.Descricao = produtoDto.Descricao;
+            produto.PrecoUnitario = produtoDto.PrecoUnitario;
 
-                _produtoRepository.UpdateProduto(produto);
-            }
+            _produtoRepository.UpdateProduto(produto);
 
             return produtoDto;
         }
 
         public string DeletaProduto(int id)
         {
-            var produto = _produtoRepository.GetProdutoId(id) ?? throw new Exception("Produto não encontrado");
+            var produto = _produtoRepository.GetProdutoId(id);
+            Validacoes.ValidaPesquisa(produto, "Produto");
+
             var pedido = _pedidoRepository.ObterPedidoProduto(produto.Id);
 
             if (pedido != null) throw new Exception("Não é possível excluir o produto pois ele pertence a um pedido");
@@ -71,7 +74,8 @@ namespace APIVenda.Aplication
 
         public ProdutoDto ExibePorId(int id)
         {
-            var produto = _produtoRepository.GetProdutoId(id) ?? throw new Exception("Produto não encontrado");
+            var produto = _produtoRepository.GetProdutoId(id);
+            Validacoes.ValidaPesquisa(produto, "Produto");
 
             return new ProdutoDto
             {
@@ -91,8 +95,12 @@ namespace APIVenda.Aplication
 
         public ExibeEstoqueDto AtualizaEstoque(EstoqueDto estoque)
         {
-            var produto = _produtoRepository.GetProdutoId(estoque.ProdutoId) ?? throw new Exception("Produto não encontrado");
-            var fornecedor = _fornecedorRepository.GetFornecedorId(estoque.FornecedorId) ?? throw new Exception("Fornecedor não encontrado");
+            var produto = _produtoRepository.GetProdutoId(estoque.ProdutoId);
+            Validacoes.ValidaPesquisa(produto, "Produto");
+
+            var fornecedor = _fornecedorRepository.GetFornecedorId(estoque.FornecedorId);
+            Validacoes.ValidaPesquisa(fornecedor, "Fornecedor");
+
             produto.QuantidadeEstoque += estoque.QuantidadeItens;
 
             _produtoRepository.UpdateProduto(produto);

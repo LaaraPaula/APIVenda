@@ -44,18 +44,17 @@ namespace APIVenda.Aplication
                     Endereco = clienteDto.Endereco
                 };
                 clienteDto.Id = _clienteRepository.AddCliente(cliente);
+                return clienteDto;
 
             }
-            else
-            {
-                cliente = _clienteRepository.GetClienteId(clienteDto.Id) ?? throw new Exception("Cliente não encontrado");
+            cliente = _clienteRepository.GetClienteId(clienteDto.Id);
+            Validacoes.ValidaPesquisa(cliente, "Cliente");
 
-                cliente.Nome = clienteDto.Nome;
-                cliente.Endereco = clienteDto.Endereco;
-                cliente.Telefone = clienteDto.Telefone;
+            cliente.Nome = clienteDto.Nome;
+            cliente.Endereco = clienteDto.Endereco;
+            cliente.Telefone = clienteDto.Telefone;
 
-                _clienteRepository.UpdateCliente(cliente);
-            }
+            _clienteRepository.UpdateCliente(cliente);
 
             return clienteDto;
         }
@@ -68,7 +67,8 @@ namespace APIVenda.Aplication
 
         public ClienteDto ExibePorId(int id)
         {
-            var cliente = _clienteRepository.GetClienteId(id) ?? throw new Exception("Cliente não encontrado");
+            var cliente = _clienteRepository.GetClienteId(id);
+            Validacoes.ValidaPesquisa(cliente, "Cliente");
 
             return new ClienteDto
             {
@@ -82,7 +82,9 @@ namespace APIVenda.Aplication
 
         public string DeletaCliente(int id)
         {
-            var cliente = _clienteRepository.GetClienteId(id) ?? throw new Exception("Cliente não encontrado");
+            var cliente = _clienteRepository.GetClienteId(id);
+            Validacoes.ValidaPesquisa(cliente, "Cliente");
+
             var venda = _vendaRepository.ObterClienteVenda(cliente.Id);
 
             if (venda != null) throw new Exception("Não é possível excluir o cliente pois ele pertence a uma venda");

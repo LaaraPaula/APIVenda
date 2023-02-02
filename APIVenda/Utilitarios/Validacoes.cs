@@ -28,6 +28,10 @@ namespace APIVenda.Utilitarios
             if (!Regex.IsMatch(documento, @"^\d{2}[.]\d{3}[.]\d{3}[/]\d{4}[-]\d{2}$")) 
                 throw new Exception("CNPJ em formato inválido xx.xxx.xxx/xxxx-xx");
         }
+        public static void ValidaPesquisa(object pesquisa,string entidade)
+        {
+            if(pesquisa==null) throw new Exception($"{entidade} não encontrado(a)");
+        }
     }
 
     public enum EnumDocumento

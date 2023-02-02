@@ -10,6 +10,7 @@ namespace APIVenda.Data.Dtos.Venda
     }
     public class ExibeVendaDto
     {
+        public int Id { get; set; }
         public string ClientePedido { get; set; }
         public string FuncionarioPedido { get; set; }
         public decimal ValorCompra { get; set; }

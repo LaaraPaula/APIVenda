@@ -7,6 +7,8 @@ using System.Collections.Generic;
 using System.Linq;
 using APIVenda.Data.Enum;
 using System.Text.RegularExpressions;
+using APIVenda.Data.Dtos.Cliente;
+using APIVenda.Utilitarios;
 
 namespace APIVenda.Aplication
 {
@@ -23,52 +25,50 @@ namespace APIVenda.Aplication
 
         public FuncionarioDto SaveFuncionario(FuncionarioDto funcionarioDto)
         {
-            if (string.IsNullOrEmpty(funcionarioDto.Nome)) throw new Exception("Necessário preencher o campo nome");
-            if (string.IsNullOrEmpty(funcionarioDto.CPF)) throw new Exception("Necessário preencher o campo CPF");
-            if (!Regex.IsMatch(funcionarioDto.CPF, @"^\d{3}[.]\d{3}[.]\d{3}[-]\d{2}$")) throw new Exception("CPF em formato inválido   EX: xxx.xxx.xxx-xx");
-
-            if (string.IsNullOrEmpty(funcionarioDto.Telefone)) throw new Exception("Necessário preencher o campo telefone");
-            if (!Regex.IsMatch(funcionarioDto.Telefone, @"^\d{6,7}[-]?\d{4}$")) throw new Exception("Telefone em formato inválido   EX:1199999-9999");
-            if (string.IsNullOrEmpty(funcionarioDto.Endereco)) throw new Exception("Necessário preencher o campo endereço");
+            Validacoes.ValidarCampo(funcionarioDto.Nome, "nome");
+            Validacoes.ValidarCampo(funcionarioDto.CPF, "cpf");
+            Validacoes.ValidarCampo(funcionarioDto.Telefone, "telefone");
+            Validacoes.ValidarCampo(funcionarioDto.Endereco, "endereço");
+            Validacoes.ValidarTelefone(funcionarioDto.Telefone);
+            Validacoes.ValidarDocumento(funcionarioDto.CPF, EnumDocumento.CPF);
             if (funcionarioDto.Cargo < 0) throw new Exception("Necessário preencher o campo cargo");
 
             Funcionarios funcionario;
             if (funcionarioDto.Id == 0)
             {
                 var cpf = _funcionarioRepository.ObtemCpf(funcionarioDto.CPF) ;
-                if (cpf == null)
+                if (cpf != null) throw new Exception("CPF já cadastrado");
+
+                funcionario = new Funcionarios
                 {
-                    funcionario = new Funcionarios
-                    {
-                        Nome = funcionarioDto.Nome,
-                        CPF = funcionarioDto.CPF,
-                        Telefone = funcionarioDto.Telefone,
-                        Endereco = funcionarioDto.Endereco,
-                        Cargo = (int)funcionarioDto.Cargo
-                    };
+                    Nome = funcionarioDto.Nome,
+                    CPF = funcionarioDto.CPF,
+                    Telefone = funcionarioDto.Telefone,
+                    Endereco = funcionarioDto.Endereco,
+                    Cargo = (int)funcionarioDto.Cargo
+                };
 
-                    funcionarioDto.Id = _funcionarioRepository.AddFuncionario(funcionario);
-                }
-                else throw new Exception("CPF já cadastrado");
+                funcionarioDto.Id = _funcionarioRepository.AddFuncionario(funcionario);
+                return funcionarioDto;
             }
-            else
-            {
-                funcionario = _funcionarioRepository.GetFuncionarioId(funcionarioDto.Id) ?? throw new Exception("Funcionario não encontrado");
+            funcionario = _funcionarioRepository.GetFuncionarioId(funcionarioDto.Id);
+            Validacoes.ValidaPesquisa(funcionario, "Fornecedor");
 
-                funcionario.Nome = funcionarioDto.Nome;
-                funcionario.Endereco = funcionarioDto.Endereco;
-                funcionario.Telefone = funcionarioDto.Telefone;
-                funcionario.Cargo = (int)funcionarioDto.Cargo;
+            funcionario.Nome = funcionarioDto.Nome;
+            funcionario.Endereco = funcionarioDto.Endereco;
+            funcionario.Telefone = funcionarioDto.Telefone;
+            funcionario.Cargo = (int)funcionarioDto.Cargo;
 
-                _funcionarioRepository.UpdateFuncionario(funcionario);
-            }
+            _funcionarioRepository.UpdateFuncionario(funcionario);
 
             return funcionarioDto;
         }
 
         public string DeletaFuncionario(int id)
         {
-            var funcionario = _funcionarioRepository.GetFuncionarioId(id) ?? throw new Exception("Funcionario não encontrado");
+            var funcionario = _funcionarioRepository.GetFuncionarioId(id);
+            Validacoes.ValidaPesquisa(funcionario, "Funcionário");
+
             var venda = _vendaRepository.ObterFuncionarioVenda(funcionario.Id);
             if (venda != null) throw new Exception("Não é possivel apagar Vendedor cadastrado em uma venda");
 
@@ -85,7 +85,9 @@ namespace APIVenda.Aplication
 
         public ExibeFuncionarioDto ExibePorId(int id)
         {
-            var funcionario = _funcionarioRepository.GetFuncionarioId(id) ?? throw new Exception("Funcionario não encontrado");
+            var funcionario = _funcionarioRepository.GetFuncionarioId(id);
+            Validacoes.ValidaPesquisa(funcionario, "Funcionário");
+
             var cargo = new EnumCargoModel();
             return new ExibeFuncionarioDto
             {
@@ -102,19 +104,6 @@ namespace APIVenda.Aplication
             var cargos = new EnumCargoModel().MostraCargos();
 
             return cargos;
-
-            //var exibe = cargos.Concat(idCargo);
-            //return String.Join(",", exibe);
-
-
-            //var list = new List<string>();
-            //
-            //for (int i = 0; i < cargos.Length; i++)
-            //{
-            //    list.Add($"{i + 1} - {cargos[i]}");
-            //}
-            //
-            //return list;
         }
     }
 }

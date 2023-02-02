@@ -46,7 +46,8 @@ namespace APIVenda.Repository
                             Id = ved.Id,
                             ClientePedido = cli.Nome,
                             FuncionarioPedido = fun.Nome,
-                            ValorCompra = ved.ValorFinal
+                            ValorCompra = ved.ValorFinal,
+                            DataVenda = ved.DataVenda
                         };
             return query.ToList();
         }
@@ -73,6 +74,7 @@ namespace APIVenda.Repository
                         where ved.Id ==id 
                         select new ExibeVendaDto
                         {
+                            Id = ved.Id,
                             ClientePedido = cli.Nome,
                             FuncionarioPedido = fun.Nome,
                             ValorCompra = ved.ValorFinal
@@ -94,6 +96,7 @@ namespace APIVenda.Repository
                         where ved.DataVenda>=data
                         select new ExibeVendaDto
                         {
+                            Id = ved.Id,
                             DataVenda = ved.DataVenda,
                             ClientePedido = cli.Nome,
                             FuncionarioPedido = fun.Nome,

@@ -45,11 +45,11 @@ namespace APIVenda.Aplication
                     CNPJ = fornecedorDto.CNPJ
                 };
                 fornecedorDto.Id = _fornecedorRepository.AddFornecedor(fornecedor);
-
                 return fornecedorDto;
             }
 
-            fornecedor = _fornecedorRepository.GetFornecedorId(fornecedorDto.Id) ?? throw new Exception("Fornecedor não encontrado");
+            fornecedor = _fornecedorRepository.GetFornecedorId(fornecedorDto.Id);
+            Validacoes.ValidaPesquisa(fornecedor, "Fornecedor");
 
             fornecedor.Nome = fornecedorDto.Nome;
             fornecedor.Endereco = fornecedorDto.Endereco;
@@ -62,7 +62,9 @@ namespace APIVenda.Aplication
 
         public string DeletaFornecedor(int id)
         {
-            var fornecedor = _fornecedorRepository.GetFornecedorId(id) ?? throw new Exception("Fornecedor não encontrado");
+            var fornecedor = _fornecedorRepository.GetFornecedorId(id);
+            Validacoes.ValidaPesquisa(fornecedor, "Fornecedor");
+
             var estoque = _controleEstoqueRepository.GetFornecedorEstoque(fornecedor.Id);
 
             if (estoque != null) throw new Exception("Não é possível deletar fornecedor cadastrado em estoque");
@@ -80,7 +82,8 @@ namespace APIVenda.Aplication
 
         public FornecedorDto ExibePorId(int id)
         {
-            var fornecedor = _fornecedorRepository.GetFornecedorId(id) ?? throw new Exception("Fornecedor não encontrado");
+            var fornecedor = _fornecedorRepository.GetFornecedorId(id);
+            Validacoes.ValidaPesquisa(fornecedor, "Fornecedor");
 
             return new FornecedorDto
             {

@@ -2,6 +2,7 @@
 using APIVenda.Data.Dtos.Venda;
 using APIVenda.Models;
 using APIVenda.Repository;
+using APIVenda.Utilitarios;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,19 +12,18 @@ namespace APIVenda.Aplication
     public class VendaApp
     {
         private readonly VendaRepository _vendaRepository;
-        private readonly PedidoRepository _pedidoRepository;
+        private readonly ClienteRepository _clienteRepository;
         private readonly FuncionarioRepository _funcionarioRepository;
         public VendaApp(DataContext context)
         {
             _vendaRepository = new VendaRepository(context);
-            _pedidoRepository = new PedidoRepository(context);
+            _clienteRepository = new ClienteRepository(context);
             _funcionarioRepository = new FuncionarioRepository(context);
         }
 
         public VendaDto SaveVenda(VendaDto vendaDto)
         {
-            if (vendaDto.FuncionarioId <= 0) throw new Exception("Necessário preencher o campo VendedorId");
-            if (vendaDto.ClienteId <= 0) throw new Exception("Necessário preencher o campo ClienteId");
+            _ = _clienteRepository.GetClienteId(vendaDto.ClienteId) ?? throw new Exception("Cliente não encontrado");
 
             _ = _funcionarioRepository.GetVendedor(vendaDto.FuncionarioId) ?? throw new Exception("Vendedor não encontrado");
             Venda venda;
@@ -36,25 +36,25 @@ namespace APIVenda.Aplication
                     ClienteId = vendaDto.ClienteId,
                     DataVenda = DateTime.Now
                 };
-                vendaDto.Id = _vendaRepository.AddVenda(venda); 
-                
+                vendaDto.Id = _vendaRepository.AddVenda(venda);
+                return vendaDto;
             }
-            else
-            {
-                venda = _vendaRepository.GetVendaId(vendaDto.Id) ?? throw new Exception("Venda não encontrada");
+            venda = _vendaRepository.GetVendaId(vendaDto.Id);
+            Validacoes.ValidaPesquisa(venda, "Venda");
 
-                venda.FuncionarioId = vendaDto.FuncionarioId;
-                venda.ClienteId = vendaDto.ClienteId;
+            venda.FuncionarioId = vendaDto.FuncionarioId;
+            venda.ClienteId = vendaDto.ClienteId;
 
-                _vendaRepository.UpdateVenda(venda);
-            }
+            _vendaRepository.UpdateVenda(venda);
 
             return vendaDto;
         }
 
         public int DeletaVenda(int id)
         {
-            var venda = _vendaRepository.GetVendaId(id) ?? throw new Exception("Venda não encontrada");
+            var venda = _vendaRepository.GetVendaId(id);
+            Validacoes.ValidaPesquisa(venda, "Venda");
+
             var vendaId = venda.Id;
             _vendaRepository.Excluir(venda);
             return vendaId;
@@ -62,9 +62,9 @@ namespace APIVenda.Aplication
 
         public ExibeVendaDto ExibePorId(int id)
         {
-            var venda = _vendaRepository.GetVendaId(id) ?? throw new Exception("Venda não encontrado");
+            var venda = _vendaRepository.GetVendaId(id);
+            Validacoes.ValidaPesquisa(venda, "Venda");
 
-                        
             return _vendaRepository.ExibeVenda(id);
         }
 
