@@ -1,5 +1,6 @@
 ﻿using APIVenda.Data;
 using APIVenda.Data.Dtos.Pedido;
+using APIVenda.Data.Dtos.Venda;
 using APIVenda.Models;
 using System;
 using System.Collections.Generic;
@@ -72,10 +73,23 @@ namespace APIVenda.Repository
             return query.FirstOrDefault();
         }
 
-        public IList<Pedido> GetPedidosVenda(int id)
+        public IList<ExibePedidoDto> GetPedidosVenda(int id)
         {
-           var pedidosVenda = _context.Pedidos.Where(x => x.VendaId == id);
-            return pedidosVenda.ToList();
+            var query = from ped in _context.Pedidos
+                        join pro in _context.Produtos
+                        on ped.ProdutoId equals pro.Id
+                        join ved in _context.Vendas
+                        on ped.VendaId equals ved.Id
+                        where ped.VendaId == ved.Id
+                        select new ExibePedidoDto
+                        {
+                            Id = ped.Id,
+                            ProdutoPedido = pro.Nome,
+                            QuantidadeProduto = ped.QuantidadeItens,
+                            ValorUnidade = ped.ValorUnitario,
+                            ValorPedido = ped.ValorTotalPedido
+                        };
+            return query.ToList();
         }
 
         public Pedido ObterPedidoProduto(int id)

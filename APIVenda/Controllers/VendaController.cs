@@ -42,7 +42,18 @@ namespace APIVenda.Controllers
                 return BadRequest(ex.Message);
             }
         }
-
+        [HttpGet("ExibePedidosVenda")]
+        public IActionResult ExibePedidosVenda(int idVenda)
+        {
+            try
+            {
+                return Ok(_vendaApp.GetPedidos(idVenda));
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
         [HttpGet("ExibeVendaPorId")]
         public IActionResult ExibeVendaPorId(int id)
         {

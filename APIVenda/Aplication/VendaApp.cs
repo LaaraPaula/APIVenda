@@ -1,4 +1,5 @@
 ﻿using APIVenda.Data;
+using APIVenda.Data.Dtos.Pedido;
 using APIVenda.Data.Dtos.Venda;
 using APIVenda.Models;
 using APIVenda.Repository;
@@ -14,11 +15,13 @@ namespace APIVenda.Aplication
         private readonly VendaRepository _vendaRepository;
         private readonly ClienteRepository _clienteRepository;
         private readonly FuncionarioRepository _funcionarioRepository;
+        private readonly PedidoRepository _pedidoRepository;
         public VendaApp(DataContext context)
         {
             _vendaRepository = new VendaRepository(context);
             _clienteRepository = new ClienteRepository(context);
             _funcionarioRepository = new FuncionarioRepository(context);
+            _pedidoRepository = new PedidoRepository(context);
         }
 
         public VendaDto SaveVenda(VendaDto vendaDto)
@@ -80,9 +83,13 @@ namespace APIVenda.Aplication
             return vendas;
         }
 
-        private decimal CalcularValorVenda(IList<Pedido> pedidos)
+        public IList<ExibePedidoDto> GetPedidos(int id)
         {
-            return pedidos.Sum(x => x.ValorTotalPedido);
+            var venda = _vendaRepository.GetVendaId(id);
+            Validacoes.ValidaPesquisa(venda, "Venda");
+
+            var pedidos = _pedidoRepository.GetPedidosVenda(id);
+            return pedidos;
         }
     }
 }
