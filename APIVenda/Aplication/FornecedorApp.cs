@@ -66,8 +66,7 @@ namespace APIVenda.Aplication
             Validacoes.ValidaPesquisa(fornecedor, "Fornecedor");
 
             var estoque = _controleEstoqueRepository.GetFornecedorEstoque(fornecedor.Id);
-
-            if (estoque != null) throw new Exception("Não é possível deletar fornecedor cadastrado em estoque");
+            Validacoes.ValidaDeletaComRelacionamento(estoque, "Fornecedor", "estoque");
 
             var nome = fornecedor.Nome;
             _fornecedorRepository.Excluir(fornecedor);

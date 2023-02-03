@@ -86,8 +86,8 @@ namespace APIVenda.Aplication
             Validacoes.ValidaPesquisa(cliente, "Cliente");
 
             var venda = _vendaRepository.ObterClienteVenda(cliente.Id);
-
-            if (venda != null) throw new Exception("Não é possível excluir o cliente pois ele pertence a uma venda");
+            Validacoes.ValidaDeletaComRelacionamento(venda, "Cliente","venda");
+            
             var nome = cliente.Nome;
             _clienteRepository.Excluir(cliente);
             return nome;

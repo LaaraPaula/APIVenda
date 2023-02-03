@@ -38,10 +38,11 @@ namespace APIVenda.Repository
 
         public void Excluir(Pedido pedido)
         {
+            var venda = _context.Vendas.FirstOrDefault(x => x.Id == pedido.VendaId);
+            venda.ValorFinal -= pedido.ValorTotalPedido;
             _context.Remove(pedido);
             _context.SaveChanges();
         }
-
         public IList<ExibePedidoDto> GetPedidos()
         {
             var query = from ped in _context.Pedidos
@@ -80,7 +81,7 @@ namespace APIVenda.Repository
                         on ped.ProdutoId equals pro.Id
                         join ved in _context.Vendas
                         on ped.VendaId equals ved.Id
-                        where ped.VendaId == ved.Id
+                        where ped.VendaId == id
                         select new ExibePedidoDto
                         {
                             Id = ped.Id,

@@ -32,6 +32,10 @@ namespace APIVenda.Utilitarios
         {
             if(pesquisa==null) throw new Exception($"{entidade} não encontrado(a)");
         }
+        public static void ValidaDeletaComRelacionamento(object pesquisa, string entidade, string atribuido)
+        {
+            if (pesquisa != null) throw new Exception($"{entidade} cadastrado em uma {atribuido}!Não é possível excluí-lo");
+        }
     }
 
     public enum EnumDocumento

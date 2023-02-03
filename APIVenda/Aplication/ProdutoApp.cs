@@ -64,9 +64,9 @@ namespace APIVenda.Aplication
             var produto = _produtoRepository.GetProdutoId(id);
             Validacoes.ValidaPesquisa(produto, "Produto");
 
-            var pedido = _pedidoRepository.ObterPedidoProduto(produto.Id);
+            var estoque = _controleEstoqueRepository.GetFornecedorEstoque(produto.Id);
+            Validacoes.ValidaDeletaComRelacionamento(estoque, "Fornecedor", "estoque");
 
-            if (pedido != null) throw new Exception("Não é possível excluir o produto pois ele pertence a um pedido");
             var nome = produto.Nome;
             _produtoRepository.Excluir(produto);
             return nome;

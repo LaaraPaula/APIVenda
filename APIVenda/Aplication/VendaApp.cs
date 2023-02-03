@@ -88,7 +88,7 @@ namespace APIVenda.Aplication
             var venda = _vendaRepository.GetVendaId(id);
             Validacoes.ValidaPesquisa(venda, "Venda");
 
-            var pedidos = _pedidoRepository.GetPedidosVenda(id);
+            var pedidos = _pedidoRepository.GetPedidosVenda(venda.Id) ;
             return pedidos;
         }
     }

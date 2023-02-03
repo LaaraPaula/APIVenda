@@ -69,8 +69,8 @@ namespace APIVenda.Aplication
             var funcionario = _funcionarioRepository.GetFuncionarioId(id);
             Validacoes.ValidaPesquisa(funcionario, "Funcionário");
 
-            var venda = _vendaRepository.ObterFuncionarioVenda(funcionario.Id);
-            if (venda != null) throw new Exception("Não é possivel apagar Vendedor cadastrado em uma venda");
+            var venda = _vendaRepository.ObterClienteVenda(funcionario.Id);
+            Validacoes.ValidaDeletaComRelacionamento(venda, "Funcionário","venda");
 
             var nome = funcionario.Nome;
             _funcionarioRepository.Excluir(funcionario);
