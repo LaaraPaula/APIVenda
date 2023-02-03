@@ -38,7 +38,7 @@ namespace APIVenda.Utilitarios
         }
         public static void ValidaDeletaComRelacionamento(object pesquisa, string entidade, string atribuido)
         {
-            if (pesquisa != null) throw new Exception($"{entidade} cadastrado em uma {atribuido}!Não é possível excluí-lo");
+            if (pesquisa != null) throw new Exception($"{entidade} cadastrado em um(a) {atribuido}!Não é possível excluí-lo");
         }
     }
 

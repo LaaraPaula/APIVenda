@@ -50,6 +50,7 @@ namespace APIVenda.Repository
                         on ped.ProdutoId equals pro.Id
                         select new ExibePedidoDto
                         {
+                            Id =ped.Id,
                             ProdutoPedido = pro.Nome,
                             QuantidadeProduto = ped.QuantidadeItens,
                             ValorUnidade = ped.ValorUnitario,
@@ -66,6 +67,7 @@ namespace APIVenda.Repository
                         where ped.Id == pedidoId
                         select new ExibePedidoDto
                         {
+                            Id= ped.Id,
                             ProdutoPedido = pro.Nome,
                             QuantidadeProduto = ped.QuantidadeItens,
                             ValorUnidade = ped.ValorUnitario,

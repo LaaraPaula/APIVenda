@@ -69,7 +69,7 @@ namespace APIVenda.Aplication
             var funcionario = _funcionarioRepository.GetFuncionarioId(id);
             Validacoes.ValidaPesquisa(funcionario, "Funcionário");
 
-            var venda = _vendaRepository.ObterClienteVenda(funcionario.Id);
+            var venda = _vendaRepository.ObterFuncionarioVenda(funcionario.Id);
             Validacoes.ValidaDeletaComRelacionamento(venda, "Funcionário","venda");
 
             var nome = funcionario.Nome;
