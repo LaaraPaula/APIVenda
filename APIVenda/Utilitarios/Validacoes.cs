@@ -22,11 +22,15 @@ namespace APIVenda.Utilitarios
         public static void ValidarDocumento(string documento, EnumDocumento tipo)
         {
             if (tipo == EnumDocumento.CPF)
+            {
                 if (!Regex.IsMatch(documento, @"^\d{3}[.]\d{3}[.]\d{3}[-]\d{2}$")) 
                     throw new Exception("CPF em formato inválido   EX: xxx.xxx.xxx-xx");
+            }
 
-            if (!Regex.IsMatch(documento, @"^\d{2}[.]\d{3}[.]\d{3}[/]\d{4}[-]\d{2}$")) 
+            else if (!Regex.IsMatch(documento, @"^\d{2}[.]\d{3}[.]\d{3}[/]\d{4}[-]\d{2}$"))
+            {
                 throw new Exception("CNPJ em formato inválido xx.xxx.xxx/xxxx-xx");
+            }
         }
         public static void ValidaPesquisa(object pesquisa,string entidade)
         {

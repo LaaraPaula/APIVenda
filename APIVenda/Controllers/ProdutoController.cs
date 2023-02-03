@@ -45,6 +45,19 @@ namespace APIVenda.Controllers
                 return BadRequest(ex.Message);
             }
         }
+        [HttpGet("ExibeEstoque")]
+        public IActionResult ExibeEstoque(int dias)
+        {
+            try
+            {
+                var estoque = _produtoApp.ExibeEstoque(dias);
+                return Ok(estoque);
+            }
+            catch(Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
         [HttpGet("ExibeProdutos")]
         public IActionResult ExibeProdutos(string nome)
         {

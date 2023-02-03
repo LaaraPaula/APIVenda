@@ -65,7 +65,7 @@ namespace APIVenda.Aplication
             Validacoes.ValidaPesquisa(produto, "Produto");
 
             var estoque = _controleEstoqueRepository.GetFornecedorEstoque(produto.Id);
-            Validacoes.ValidaDeletaComRelacionamento(estoque, "Fornecedor", "estoque");
+            Validacoes.ValidaDeletaComRelacionamento(estoque, "Produto", "estoque");
 
             var nome = produto.Nome;
             _produtoRepository.Excluir(produto);
@@ -121,6 +121,11 @@ namespace APIVenda.Aplication
                 DataEntradaEstoque =estocado.DataEntradaEstoque,
                 TotalEstoque=produto.QuantidadeEstoque                
             };
+        }
+        public IList<ExibeEstoqueDto> ExibeEstoque(int dias)
+        {
+            var estoque = _controleEstoqueRepository.EstoqueData(dias);
+            return estoque;
         }
     }
 }
