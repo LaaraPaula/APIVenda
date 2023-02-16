@@ -30,7 +30,6 @@ namespace APIVenda.Aplication
             Validacoes.ValidarCampo(produtoDto.Nome, "nome");
             Validacoes.ValidarCampo(produtoDto.Descricao, "descrição");
             if (produtoDto.PrecoUnitario<=0) throw new Exception("Campo PreçoUnitario deve ser preenchido com valor maior que '0' ");
-            
 
             Produto produto;
             if (produtoDto.Id == 0)

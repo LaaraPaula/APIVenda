@@ -47,6 +47,7 @@ namespace APIVenda.Repository
                         select new ExibeFuncionarioDto
                         {
                             Id= a.Id,
+                            Cpf=a.CPF,
                             Nome = a.Nome,
                             Cargo = ((EnumCargo)a.Cargo).ToString(),
                             Telefone = a.Telefone,
