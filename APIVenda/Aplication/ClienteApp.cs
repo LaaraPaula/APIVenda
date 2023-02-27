@@ -23,15 +23,16 @@ namespace APIVenda.Aplication
         public ClienteDto SaveClient(ClienteDto clienteDto)
         {
             Validacoes.ValidarCampo(clienteDto.Nome, "nome");
-            Validacoes.ValidarCampo(clienteDto.CPF, "cpf");
             Validacoes.ValidarCampo(clienteDto.Telefone, "telefone");
             Validacoes.ValidarCampo(clienteDto.Endereco, "endereço");
             Validacoes.ValidarTelefone(clienteDto.Telefone);
-            Validacoes.ValidarDocumento(clienteDto.CPF, EnumDocumento.CPF);
 
             Cliente cliente;
             if (clienteDto.Id == 0)
             {
+
+                Validacoes.ValidarCampo(clienteDto.CPF, "cpf");
+                Validacoes.ValidarDocumento(clienteDto.CPF, EnumDocumento.CPF);
 
                 var cpf = _clienteRepository.ObtemCPF(clienteDto.CPF);
                 if (cpf != null) throw new Exception("CPF já cadastrado");

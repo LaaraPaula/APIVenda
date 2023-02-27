@@ -26,16 +26,17 @@ namespace APIVenda.Aplication
         public FuncionarioDto SaveFuncionario(FuncionarioDto funcionarioDto)
         {
             Validacoes.ValidarCampo(funcionarioDto.Nome, "nome");
-            Validacoes.ValidarCampo(funcionarioDto.CPF, "cpf");
             Validacoes.ValidarCampo(funcionarioDto.Telefone, "telefone");
             Validacoes.ValidarCampo(funcionarioDto.Endereco, "endereço");
             Validacoes.ValidarTelefone(funcionarioDto.Telefone);
-            Validacoes.ValidarDocumento(funcionarioDto.CPF, EnumDocumento.CPF);
             if (funcionarioDto.Cargo < 0) throw new Exception("Necessário preencher o campo cargo");
 
             Funcionarios funcionario;
             if (funcionarioDto.Id == 0)
             {
+                Validacoes.ValidarCampo(funcionarioDto.CPF, "cpf");
+                Validacoes.ValidarDocumento(funcionarioDto.CPF, EnumDocumento.CPF);
+
                 var cpf = _funcionarioRepository.ObtemCpf(funcionarioDto.CPF) ;
                 if (cpf != null) throw new Exception("CPF já cadastrado");
 
@@ -95,6 +96,7 @@ namespace APIVenda.Aplication
                 Nome = funcionario.Nome,
                 Telefone = funcionario.Telefone,
                 Endereco = funcionario.Endereco,
+                Cpf = funcionario.CPF,
                 Cargo = cargo.GetAtributo((EnumCargo)funcionario.Cargo).Nome
             };
         }

@@ -23,16 +23,17 @@ namespace APIVenda.Aplication
         public FornecedorDto SaveFornecedor(FornecedorDto fornecedorDto)
         {
             Validacoes.ValidarCampo(fornecedorDto.Nome, "nome");
-            Validacoes.ValidarCampo(fornecedorDto.CNPJ, "CNPJ");
             Validacoes.ValidarCampo(fornecedorDto.Telefone, "telefone");
             Validacoes.ValidarCampo(fornecedorDto.Endereco, "endereço");
             Validacoes.ValidarTelefone(fornecedorDto.Telefone);
-            Validacoes.ValidarDocumento(fornecedorDto.CNPJ, EnumDocumento.CNPJ);
 
 
             Fornecedor fornecedor;
             if (fornecedorDto.Id == 0)
             {
+                Validacoes.ValidarCampo(fornecedorDto.CNPJ, "CNPJ");
+                Validacoes.ValidarDocumento(fornecedorDto.CNPJ, EnumDocumento.CNPJ);
+
                 var cnpj = _fornecedorRepository.ObtemCNPJ(fornecedorDto.CNPJ);
 
                 if (cnpj != null) throw new Exception("CNPJ já cadastrado");
