@@ -15,7 +15,7 @@ namespace APIVenda.Utilitarios
 
         public static void ValidarTelefone(string telefone)
         {
-            if (!Regex.IsMatch(telefone, @"^\d{2}[-]?\d{4}$")) 
+            if (!Regex.IsMatch(telefone, @"^\d{6,7}[-]?\d{4}$")) 
                 throw new Exception("Telefone em formato invalido   EX 1199999-9999 ");
         }
 
@@ -38,7 +38,7 @@ namespace APIVenda.Utilitarios
         }
         public static void ValidaDeletaComRelacionamento(object pesquisa, string entidade, string atribuido)
         {
-            if (pesquisa != null) throw new Exception($"{entidade} cadastrado em um {atribuido},nao podenso ser excluido");
+            if (pesquisa != null) throw new Exception($"{entidade} cadastrado em um {atribuido},nao possivel exclui-lo");
         }
     }
 
