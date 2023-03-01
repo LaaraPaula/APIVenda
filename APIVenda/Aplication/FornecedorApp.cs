@@ -36,7 +36,7 @@ namespace APIVenda.Aplication
 
                 var cnpj = _fornecedorRepository.ObtemCNPJ(fornecedorDto.CNPJ);
 
-                if (cnpj != null) throw new Exception("CNPJ já cadastrado");
+                if (cnpj != null) throw new Exception("CNPJ ja cadastrado");
 
                 fornecedor = new Fornecedor
                 {

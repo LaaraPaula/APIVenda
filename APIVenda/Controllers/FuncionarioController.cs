@@ -78,7 +78,7 @@ namespace APIVenda.Controllers
             try
             {
                 var funcionario = _funcionarioApp.DeletaFuncionario(id);
-                return Ok($"FUNCIONARIO {funcionario} deletado!");
+                return Ok($"FUNCIONARIO {funcionario} deletado");
             }
             catch (Exception ex)
             {

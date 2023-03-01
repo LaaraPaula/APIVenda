@@ -28,13 +28,13 @@ namespace APIVenda.Aplication
         public ProdutoDto SaveProduto(ProdutoDto produtoDto)
         {
             Validacoes.ValidarCampo(produtoDto.Nome, "nome");
-            Validacoes.ValidarCampo(produtoDto.Descricao, "descrição");
-            if (produtoDto.PrecoUnitario<=0) throw new Exception("Campo PreçoUnitario deve ser preenchido com valor maior que '0' ");
+            Validacoes.ValidarCampo(produtoDto.Descricao, "descriçao");
+            if (produtoDto.PrecoUnitario<=0) throw new Exception("Campo PrecoUnitario deve ser preenchido com valor maior que 0 ");
 
             Produto produto;
             if (produtoDto.Id == 0)
             {
-                if (produtoDto.QuantidadeEstoque <= 0) throw new Exception("Campo QuantidadeEstoque deve ser preenchido com valor maior que '0' ");
+                if (produtoDto.QuantidadeEstoque <= 0) throw new Exception("Campo QuantidadeEstoque deve ser preenchido com valor maior que 0 ");
                 produto = new Produto
                 {
                     Nome = produtoDto.Nome,

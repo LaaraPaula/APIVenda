@@ -62,7 +62,7 @@ namespace APIVenda.Controllers
             try
             {
                 var pedido = _pedidoApp.DeletaPedido(id);
-                return Ok($"PEDIDO {pedido} deletado!");
+                return Ok($"PEDIDO {pedido} deletado");
             }
             catch (Exception ex)
             {

@@ -35,7 +35,7 @@ namespace APIVenda.Aplication
                 Validacoes.ValidarDocumento(clienteDto.CPF, EnumDocumento.CPF);
 
                 var cpf = _clienteRepository.ObtemCPF(clienteDto.CPF);
-                if (cpf != null) throw new Exception("CPF já cadastrado");
+                if (cpf != null) throw new Exception("CPF ja cadastrado");
 
                 cliente = new Cliente
                 {

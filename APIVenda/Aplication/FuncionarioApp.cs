@@ -29,7 +29,7 @@ namespace APIVenda.Aplication
             Validacoes.ValidarCampo(funcionarioDto.Telefone, "telefone");
             Validacoes.ValidarCampo(funcionarioDto.Endereco, "endereço");
             Validacoes.ValidarTelefone(funcionarioDto.Telefone);
-            if (funcionarioDto.Cargo < 0) throw new Exception("Necessário preencher o campo cargo");
+            if (funcionarioDto.Cargo < 0) throw new Exception("Necesario preencher o campo cargo");
 
             Funcionarios funcionario;
             if (funcionarioDto.Id == 0)
@@ -38,7 +38,7 @@ namespace APIVenda.Aplication
                 Validacoes.ValidarDocumento(funcionarioDto.CPF, EnumDocumento.CPF);
 
                 var cpf = _funcionarioRepository.ObtemCpf(funcionarioDto.CPF) ;
-                if (cpf != null) throw new Exception("CPF já cadastrado");
+                if (cpf != null) throw new Exception("CPF ja cadastrado");
 
                 funcionario = new Funcionarios
                 {
@@ -53,7 +53,7 @@ namespace APIVenda.Aplication
                 return funcionarioDto;
             }
             funcionario = _funcionarioRepository.GetFuncionarioId(funcionarioDto.Id);
-            Validacoes.ValidaPesquisa(funcionario, "Fornecedor");
+            Validacoes.ValidaPesquisa(funcionario, "Funcionario");
 
             funcionario.Nome = funcionarioDto.Nome;
             funcionario.Endereco = funcionarioDto.Endereco;
@@ -68,10 +68,10 @@ namespace APIVenda.Aplication
         public string DeletaFuncionario(int id)
         {
             var funcionario = _funcionarioRepository.GetFuncionarioId(id);
-            Validacoes.ValidaPesquisa(funcionario, "Funcionário");
+            Validacoes.ValidaPesquisa(funcionario, "Funcionario");
 
             var venda = _vendaRepository.ObterFuncionarioVenda(funcionario.Id);
-            Validacoes.ValidaDeletaComRelacionamento(venda, "Funcionário","venda");
+            Validacoes.ValidaDeletaComRelacionamento(venda, "Funcionario","venda");
 
             var nome = funcionario.Nome;
             _funcionarioRepository.Excluir(funcionario);
@@ -87,7 +87,7 @@ namespace APIVenda.Aplication
         public ExibeFuncionarioDto ExibePorId(int id)
         {
             var funcionario = _funcionarioRepository.GetFuncionarioId(id);
-            Validacoes.ValidaPesquisa(funcionario, "Funcionário");
+            Validacoes.ValidaPesquisa(funcionario, "Funcionario");
 
             var cargo = new EnumCargoModel();
             return new ExibeFuncionarioDto

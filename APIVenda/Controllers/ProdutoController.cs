@@ -93,7 +93,7 @@ namespace APIVenda.Controllers
             try
             {
                 var deletado = _produtoApp.DeletaProduto(id);
-                return Ok($"PRODUTO {deletado} deletado!");
+                return Ok($"PRODUTO {deletado} deletado");
             }
             catch (Exception ex)
             {

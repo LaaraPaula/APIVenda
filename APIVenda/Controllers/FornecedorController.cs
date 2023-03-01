@@ -67,7 +67,7 @@ namespace APIVenda.Controllers
             try
             {
                 var fornecedor = _fornecedorApp.DeletaFornecedor(id);
-                return Ok($"FORNECEDOR {fornecedor} deletado!");
+                return Ok($"FORNECEDOR {fornecedor} deletado");
             }
             catch (Exception ex)
             {
