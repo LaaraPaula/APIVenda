@@ -23,7 +23,7 @@ namespace APIVenda.Aplication
             _vendaRepository = new VendaRepository(context);
         }
 
-        public FuncionarioDto SaveFuncionario(FuncionarioDto funcionarioDto)
+        public (FuncionarioDto,string) SaveFuncionario(FuncionarioDto funcionarioDto)
         {
             Validacoes.ValidarCampo(funcionarioDto.Nome, "nome");
             Validacoes.ValidarCampo(funcionarioDto.Telefone, "telefone");
@@ -32,8 +32,10 @@ namespace APIVenda.Aplication
             if (funcionarioDto.Cargo < 0) throw new Exception("Necesario preencher o campo cargo");
 
             Funcionarios funcionario;
+            var tipo = "Editar";
             if (funcionarioDto.Id == 0)
             {
+                tipo = "Cadastro";
                 Validacoes.ValidarCampo(funcionarioDto.CPF, "cpf");
                 Validacoes.ValidarDocumento(funcionarioDto.CPF, EnumDocumento.CPF);
 
@@ -50,7 +52,7 @@ namespace APIVenda.Aplication
                 };
 
                 funcionarioDto.Id = _funcionarioRepository.AddFuncionario(funcionario);
-                return funcionarioDto;
+                return (funcionarioDto,tipo);
             }
             funcionario = _funcionarioRepository.GetFuncionarioId(funcionarioDto.Id);
             Validacoes.ValidaPesquisa(funcionario, "Funcionario");
@@ -62,7 +64,7 @@ namespace APIVenda.Aplication
 
             _funcionarioRepository.UpdateFuncionario(funcionario);
 
-            return funcionarioDto;
+            return (funcionarioDto,tipo);
         }
 
         public string DeletaFuncionario(int id)

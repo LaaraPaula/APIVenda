@@ -25,15 +25,17 @@ namespace APIVenda.Aplication
             _controleEstoqueRepository = new ControleEstoqueRepository(context);
         }
 
-        public ProdutoDto SaveProduto(ProdutoDto produtoDto)
+        public (ProdutoDto,string) SaveProduto(ProdutoDto produtoDto)
         {
             Validacoes.ValidarCampo(produtoDto.Nome, "nome");
             Validacoes.ValidarCampo(produtoDto.Descricao, "descriçao");
             if (produtoDto.PrecoUnitario<=0) throw new Exception("Campo PrecoUnitario deve ser preenchido com valor maior que 0 ");
 
             Produto produto;
+            var tipo = "Editar";
             if (produtoDto.Id == 0)
             {
+                tipo = "Cadastrar";
                 if (produtoDto.QuantidadeEstoque <= 0) throw new Exception("Campo QuantidadeEstoque deve ser preenchido com valor maior que 0 ");
                 produto = new Produto
                 {
@@ -44,7 +46,7 @@ namespace APIVenda.Aplication
                 };
 
                 produtoDto.Id = _produtoRepository.AddProduto(produto);
-                return produtoDto;
+                return (produtoDto,tipo);
             }
             produto = _produtoRepository.GetProdutoId(produtoDto.Id);
             Validacoes.ValidaPesquisa(produto, "Produto");
@@ -55,7 +57,7 @@ namespace APIVenda.Aplication
 
             _produtoRepository.UpdateProduto(produto);
 
-            return produtoDto;
+            return (produtoDto,tipo);
         }
 
         public string DeletaProduto(int id)

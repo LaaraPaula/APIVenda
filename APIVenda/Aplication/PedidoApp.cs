@@ -21,7 +21,7 @@ namespace APIVenda.Aplication
             _vendaRepository = new VendaRepository(context);
         }
 
-        public PedidoDto SavePedido(PedidoDto pedidoDto)
+        public (PedidoDto,string) SavePedido(PedidoDto pedidoDto)
         {
             var produto = _produtoRepository.GetProdutoId(pedidoDto.ProdutoId) ?? throw new Exception("Produto não encontrado");
             var venda = _vendaRepository.GetVendaId(pedidoDto.VendaId) ?? throw new Exception("Venda não encontrada");
@@ -33,8 +33,10 @@ namespace APIVenda.Aplication
             if (pedidoDto.QuantidadeItens > produto.QuantidadeEstoque) throw new Exception("Quantidade em estoque insuficiente");
 
             Pedido pedido;
+            var tipo = "Editar";
             if (pedidoDto.Id == 0)
             {
+                tipo = "Cadastro";
                 pedido = new Pedido
                 {
                     ProdutoId = pedidoDto.ProdutoId,
@@ -47,7 +49,7 @@ namespace APIVenda.Aplication
 
                 venda.ValorFinal += pedido.ValorTotalPedido;
                 _produtoRepository.AtualizaEstoque(pedidoDto.Id, produto.Id);
-                return pedidoDto;
+                return (pedidoDto,tipo);
             }
             pedido = _pedidoRepository.GetPedidoId(pedidoDto.Id);
             Validacoes.ValidaPesquisa(pedido, "Pedido");
@@ -65,7 +67,7 @@ namespace APIVenda.Aplication
             venda.ValorFinal += pedido.ValorTotalPedido;
             _produtoRepository.AtualizaEstoque(pedidoDto.Id, produto.Id);
 
-            return pedidoDto;
+            return (pedidoDto,tipo);
         }
         public int DeletaPedido(int id)
         {

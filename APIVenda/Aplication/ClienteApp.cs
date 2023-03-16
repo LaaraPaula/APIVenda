@@ -20,7 +20,7 @@ namespace APIVenda.Aplication
             _vendaRepository = new VendaRepository(context);
         }
 
-        public ClienteDto SaveClient(ClienteDto clienteDto)
+        public (ClienteDto, string) SaveClient(ClienteDto clienteDto)
         {
             Validacoes.ValidarCampo(clienteDto.Nome, "nome");
             Validacoes.ValidarCampo(clienteDto.Telefone, "telefone");
@@ -28,9 +28,10 @@ namespace APIVenda.Aplication
             Validacoes.ValidarTelefone(clienteDto.Telefone);
 
             Cliente cliente;
+            var tipo = "Editar";
             if (clienteDto.Id == 0)
             {
-
+                tipo = "Cadastro";
                 Validacoes.ValidarCampo(clienteDto.CPF, "cpf");
                 Validacoes.ValidarDocumento(clienteDto.CPF, EnumDocumento.CPF);
 
@@ -45,7 +46,7 @@ namespace APIVenda.Aplication
                     Endereco = clienteDto.Endereco
                 };
                 clienteDto.Id = _clienteRepository.AddCliente(cliente);
-                return clienteDto;
+                return (clienteDto,tipo);
 
             }
             cliente = _clienteRepository.GetClienteId(clienteDto.Id);
@@ -57,7 +58,7 @@ namespace APIVenda.Aplication
 
             _clienteRepository.UpdateCliente(cliente);
 
-            return clienteDto;
+            return (clienteDto,tipo);
         }
 
         public IList<ClienteDto> ExibeClientes(string nome)
@@ -91,7 +92,7 @@ namespace APIVenda.Aplication
             
             var nome = cliente.Nome;
             _clienteRepository.Excluir(cliente);
-            return nome;
+            return (nome);
         }
     }
 }

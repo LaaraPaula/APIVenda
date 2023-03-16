@@ -20,17 +20,18 @@ namespace APIVenda.Aplication
             _controleEstoqueRepository = new ControleEstoqueRepository(context);
         }
 
-        public FornecedorDto SaveFornecedor(FornecedorDto fornecedorDto)
+        public (FornecedorDto,string) SaveFornecedor(FornecedorDto fornecedorDto)
         {
             Validacoes.ValidarCampo(fornecedorDto.Nome, "nome");
             Validacoes.ValidarCampo(fornecedorDto.Telefone, "telefone");
             Validacoes.ValidarCampo(fornecedorDto.Endereco, "endereço");
             Validacoes.ValidarTelefone(fornecedorDto.Telefone);
 
-
+            var tipo = "Editar";
             Fornecedor fornecedor;
             if (fornecedorDto.Id == 0)
             {
+                tipo = "Cadastro";
                 Validacoes.ValidarCampo(fornecedorDto.CNPJ, "CNPJ");
                 Validacoes.ValidarDocumento(fornecedorDto.CNPJ, EnumDocumento.CNPJ);
 
@@ -46,7 +47,7 @@ namespace APIVenda.Aplication
                     CNPJ = fornecedorDto.CNPJ
                 };
                 fornecedorDto.Id = _fornecedorRepository.AddFornecedor(fornecedor);
-                return fornecedorDto;
+                return (fornecedorDto,tipo);
             }
 
             fornecedor = _fornecedorRepository.GetFornecedorId(fornecedorDto.Id);
@@ -58,7 +59,7 @@ namespace APIVenda.Aplication
 
             _fornecedorRepository.UpdateFornecedor(fornecedor);
 
-            return fornecedorDto;
+            return (fornecedorDto,tipo);
         }
 
         public string DeletaFornecedor(int id)

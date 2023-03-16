@@ -24,15 +24,16 @@ namespace APIVenda.Aplication
             _pedidoRepository = new PedidoRepository(context);
         }
 
-        public VendaDto SaveVenda(VendaDto vendaDto)
+        public (VendaDto,string) SaveVenda(VendaDto vendaDto)
         {
             _ = _clienteRepository.GetClienteId(vendaDto.ClienteId) ?? throw new Exception("Cliente não encontrado");
 
             _ = _funcionarioRepository.GetVendedor(vendaDto.FuncionarioId) ?? throw new Exception("Vendedor não encontrado");
             Venda venda;
+            var tipo = "Editar";
             if (vendaDto.Id == 0)
             {
-
+                tipo = "Cadastrar";
                 venda = new Venda
                 {
                     FuncionarioId = vendaDto.FuncionarioId,
@@ -40,7 +41,7 @@ namespace APIVenda.Aplication
                     DataVenda = DateTime.Now
                 };
                 vendaDto.Id = _vendaRepository.AddVenda(venda);
-                return vendaDto;
+                return (vendaDto, tipo);
             }
             venda = _vendaRepository.GetVendaId(vendaDto.Id);
             Validacoes.ValidaPesquisa(venda, "Venda");
@@ -50,7 +51,7 @@ namespace APIVenda.Aplication
 
             _vendaRepository.UpdateVenda(venda);
 
-            return vendaDto;
+            return (vendaDto,tipo);
         }
 
         public int DeletaVenda(int id)
