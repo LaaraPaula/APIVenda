@@ -26,7 +26,7 @@ namespace APIVenda.Controllers
             {
                 var (objPedido,pedido) = _pedidoApp.SavePedido(pedidoDto);
                 _logger.LogInformation($"{pedido} pedido...");
-                _logger.LogInformation($"{pedido} pedido n°{objPedido.Id} efetuado com sucesso \t {DateTime.Now:dd/MM/yyyy HH:mm:ss}");
+                _logger.LogInformation($"{pedido} pedido n°{objPedido.Id} efetuado com sucesso.");
                 return Ok(objPedido);
             }
             catch(Exception ex)
@@ -40,8 +40,10 @@ namespace APIVenda.Controllers
         {
             try
             {
-                _logger.LogInformation($"Buscando lista de pedidos... \t {DateTime.Now:dd/MM/yyyy HH:mm:ss}");
-                return Ok(_pedidoApp.ExibePedidos());
+                _logger.LogInformation("Buscando lista de pedidos...");
+                var pedidos = _pedidoApp.ExibePedidos();
+                _logger.LogInformation("Lista de pedidos exibida com sucesso.");
+                return Ok(pedidos);
 
             }
             catch (Exception ex)
@@ -58,7 +60,7 @@ namespace APIVenda.Controllers
             {
                 _logger.LogInformation($"Buscando pedido por id...");
                 var pedido = _pedidoApp.ExibePorId(id);
-                _logger.LogInformation($"Pedido n°{pedido.Id} encontrado \t {DateTime.Now:dd/MM/yyyy HH:mm:ss}");
+                _logger.LogInformation($"Pedido n°{pedido.Id} encontrado.");
                 return Ok(pedido);
 
             }
@@ -75,7 +77,7 @@ namespace APIVenda.Controllers
             {
                 _logger.LogInformation("Iniciando \"Deletar\"...");
                 var pedido = _pedidoApp.DeletaPedido(id);
-                _logger.LogInformation($"Pedido n°{pedido} deletado com sucesso \t {DateTime.Now:dd/MM/yyyy HH/mm/ss}");
+                _logger.LogInformation($"Pedido n°{pedido} deletado com sucesso.");
                 return Ok($"PEDIDO {pedido} deletado");
             }
             catch (Exception ex)

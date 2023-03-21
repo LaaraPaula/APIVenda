@@ -27,7 +27,7 @@ namespace APIVenda.Controllers
             {
                 var (objRetorno, fornecedor) = _fornecedorApp.SaveFornecedor(fornecedorDto);
                 _logger.LogInformation($"{fornecedor} fornecedor...");
-                _logger.LogInformation($"{fornecedor} fornecedor {objRetorno.Nome} efetuado com sucesso");
+                _logger.LogInformation($"{fornecedor} do(a) fornecedor(a) {objRetorno.Nome} efetuado com sucesso");
                 return Ok(objRetorno);
             }
 
@@ -45,7 +45,7 @@ namespace APIVenda.Controllers
             {
                 _logger.LogInformation("Buscando lista de fornecedores...");
                 var fornecedor = _fornecedorApp.ExibeFornecedores(nome);
-                _logger.LogInformation($"Lista de fornecedores exbida \t {DateTime.Now:dd/MM/yyyy HH:mm:ss}");
+                _logger.LogInformation($"Lista de fornecedores exibida.");
                 return Ok(fornecedor);
 
             }
@@ -63,7 +63,7 @@ namespace APIVenda.Controllers
             {
                 _logger.LogInformation("Buscando Fornecedor por id...");
                 var fornecedor = _fornecedorApp.ExibePorId(id);
-                _logger.LogInformation($"Fornecedor {fornecedor.Nome} encontrado \t {DateTime.Now:dd/MM/yyyy HH:mm:ss}");
+                _logger.LogInformation($"Fornecedor {fornecedor.Nome} encontrado.");
                 return Ok(fornecedor);
             }
             catch (Exception ex)
@@ -79,7 +79,7 @@ namespace APIVenda.Controllers
             {
                 _logger.LogInformation("Iniciando \"Deletar\"...");
                 var fornecedor = _fornecedorApp.DeletaFornecedor(id);
-                _logger.LogInformation($"Fornecedor {fornecedor} deletado \t {DateTime.Now:dd/MM/yyy HH:mm:ss}");
+                _logger.LogInformation($"Fornecedor {fornecedor} deletado.");
                 return Ok($"FORNECEDOR {fornecedor} deletado");
             }
             catch (Exception ex)

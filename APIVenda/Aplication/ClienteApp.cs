@@ -92,7 +92,7 @@ namespace APIVenda.Aplication
             
             var nome = cliente.Nome;
             _clienteRepository.Excluir(cliente);
-            return (nome);
+            return nome;
         }
     }
 }

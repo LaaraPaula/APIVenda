@@ -28,7 +28,7 @@ namespace APIVenda.Controllers
             {
                 var (objProduto,produto) = _produtoApp.SaveProduto(produtoDto);
                 _logger.LogInformation($"{produto} produto...");
-                _logger.LogInformation($"{produto} produto {objProduto.Nome} efetuado com sucesso. \t {DateTime.Now:dd/MM/yyyy HH:mm:ss}");
+                _logger.LogInformation($"{produto} produto {objProduto.Nome} efetuado com sucesso.");
                 return Ok(objProduto);
             }
 
@@ -45,7 +45,7 @@ namespace APIVenda.Controllers
             {
                 _logger.LogInformation("Atualizando estoque...");
                 var produto = _produtoApp.AtualizaEstoque(estoque);
-                _logger.LogInformation($"Estoque atualizado com sucesso. \t {DateTime.Now:dd/MM/yyyy HH:mm:ss}");
+                _logger.LogInformation($"Estoque atualizado com sucesso.");
                 return Ok(produto);
             }
             catch(Exception ex)
@@ -61,7 +61,7 @@ namespace APIVenda.Controllers
             {
                 _logger.LogInformation($"Buscando estoques...");
                 var estoque = _produtoApp.ExibeEstoque(dias);
-                _logger.LogInformation($"Lista de estoques encontrada. \t {DateTime.Now:dd/MM/yyyy HH:mm:ss}");
+                _logger.LogInformation($"Lista de estoques encontrada.");
                 return Ok(estoque);
             }
             catch(Exception ex)
@@ -77,7 +77,7 @@ namespace APIVenda.Controllers
             {
                 _logger.LogInformation($"Buscando lista de produtos...");
                 var produto = _produtoApp.ExibeProdutos(nome);
-                _logger.LogInformation($"Lista de produtos encontrada. \t {DateTime.Now:dd/MM/yyyy HH:mm:ss}");
+                _logger.LogInformation($"Lista de produtos encontrada.");
                 return Ok(produto);
 
             }
@@ -95,7 +95,7 @@ namespace APIVenda.Controllers
             {
                 _logger.LogInformation($"Buscando produto por id...");
                 var produto = _produtoApp.ExibePorId(id);
-                _logger.LogInformation($"Produto {produto.Nome} encontrado. \t {DateTime.Now:dd/MM/yyyy HH:mm:ss}");
+                _logger.LogInformation($"Produto {produto.Nome} encontrado.");
                 return Ok(produto);
 
             }
@@ -112,7 +112,7 @@ namespace APIVenda.Controllers
             {
                 _logger.LogInformation($"Inciando \"Deletar\"...");
                 var deletado = _produtoApp.DeletaProduto(id);
-                _logger.LogInformation($"Produto {deletado} com sucesso. \t {DateTime.Now:dd/MM/yyyy HH:mm:ss}");
+                _logger.LogInformation($"Produto {deletado} com sucesso.");
                 return Ok($"PRODUTO {deletado} deletado");
             }
             catch (Exception ex)

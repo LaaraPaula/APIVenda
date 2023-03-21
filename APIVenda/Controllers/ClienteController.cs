@@ -30,7 +30,7 @@ namespace APIVenda.Controllers
             {                
                 var (objCliente,cliente) = _clienteApp.SaveClient(clienteDto);
                 _logger.LogInformation($"{cliente} cliente...");
-                _logger.LogInformation($"{cliente} cliente {objCliente.Nome} feito com sucesso \t {DateTime.Now:dd/MM/yyyy HH:mm:ss}");
+                _logger.LogInformation($"{cliente} do(a) cliente {objCliente.Nome} efetuado com sucesso.");
                 return Ok(objCliente);
             }
 
@@ -47,7 +47,7 @@ namespace APIVenda.Controllers
             {
                 _logger.LogInformation("Buscando lista de clientes...");
                 var clientes = _clienteApp.ExibeClientes(nome);
-                _logger.LogInformation($"Lista de cliente exbida \t {DateTime.Now:dd/MM/yyyy HH:mm:ss}");
+                _logger.LogInformation($"Lista de cliente exbida.");
                 return Ok(clientes); 
 
             }
@@ -65,7 +65,7 @@ namespace APIVenda.Controllers
             {
                 _logger.LogInformation("Buscando cliente por id...");
                 var cliente = _clienteApp.ExibePorId(id);
-                _logger.LogInformation($"Cliente {cliente.Nome} encontrado \t {DateTime.Now:dd/MM/yyyy HH:mm:ss}");
+                _logger.LogInformation($"Cliente {cliente.Nome} encontrado.");
                 return Ok(cliente);
 
             }
@@ -82,7 +82,7 @@ namespace APIVenda.Controllers
             {
                 _logger.LogInformation("Iniciando \"Deletar\"...");
                 var cliente = _clienteApp.DeletaCliente(id);
-                _logger.LogInformation($"Cliente {cliente} deletado \t {DateTime.Now:dd/MM/yyyy HH:mm:ss}");
+                _logger.LogInformation($"Cliente {cliente} deletado.");
 
                 return Ok($"CLIENTE {cliente} deletado");
             }

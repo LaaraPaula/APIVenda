@@ -26,7 +26,7 @@ namespace APIVenda.Controllers
             {
                 var (objVenda,venda) = _vendaApp.SaveVenda(vendaDto);
                 _logger.LogInformation($"{venda} venda...");
-                _logger.LogInformation($"{venda} venda efetuado com sucesso. \t {DateTime.Now:dd/MM/yyyy HH:mm:ss}");
+                _logger.LogInformation($"{venda} da venda n°{objVenda.Id} efetuado com sucesso");
                 return Ok(objVenda);
             }
             catch (Exception ex)
@@ -42,7 +42,7 @@ namespace APIVenda.Controllers
             {
                 _logger.LogInformation($"Buscando lista de vendas...");
                 var vendas = _vendaApp.ExibeVendas();
-                _logger.LogInformation($"Lista de vendas exibida. \t {DateTime.Now:dd/MM/yyyy HH:mm:ss}");
+                _logger.LogInformation($"Lista de vendas exibida.");
                 return Ok(vendas);
 
             }
@@ -59,7 +59,7 @@ namespace APIVenda.Controllers
             {
                 _logger.LogInformation($"Buscando pedidos da venda n°{idVenda}...");
                 var pedidos = _vendaApp.GetPedidos(idVenda);
-                _logger.LogInformation($"Lista de pedidos exibida. \t {DateTime.Now:dd/MM/yyyy HH:mm:ss}");
+                _logger.LogInformation($"Lista de pedidos exibida. ");
                 return Ok(pedidos);
             }
             catch (Exception ex)
@@ -75,7 +75,7 @@ namespace APIVenda.Controllers
             {
                 _logger.LogInformation($"Buscando venda por id...");
                 var venda = _vendaApp.ExibePorId(id);
-                _logger.LogInformation($"Venda n°{venda} encontrada. \t {DateTime.Now:dd/MM/yyyy HH:mm:ss}");
+                _logger.LogInformation($"Venda n°{venda} encontrada.");
                 return Ok(venda);
 
             }
@@ -92,7 +92,7 @@ namespace APIVenda.Controllers
             {
                 _logger.LogInformation($"Iniciando \"Deletar\"...");
                 var venda =_vendaApp.DeletaVenda(id);
-                _logger.LogInformation($"Venda n°{venda} deletada com sucesso. \t {DateTime.Now:dd/MM/yyyy HH:mm:ss}");
+                _logger.LogInformation($"Venda n°{venda} deletada com sucesso.");
                 return Ok($"VENDA {venda} deletada");
             }
             catch (Exception ex)
@@ -109,7 +109,7 @@ namespace APIVenda.Controllers
             {
                 _logger.LogInformation($"Buscando vendas do últimos {dias} dias...");
                 var vendas = _vendaApp.VendasPorPeriodo(dias);
-                _logger.LogInformation($"Vendas do período exibida. \t {DateTime.Now:dd/MM/yyyy HH:mm:ss}");
+                _logger.LogInformation($"Vendas do período exibida.");
                 return Ok(vendas);
             }
             catch(Exception ex)

@@ -41,7 +41,7 @@ namespace APIVenda.Controllers
             {
                 var (objFuncionario,funcionario) = _funcionarioApp.SaveFuncionario(funcionarioDto);
                 _logger.LogInformation($"{funcionario} funcionario(a)...");
-                _logger.LogInformation($"{funcionario} do(a) funcionário(a) {objFuncionario.Nome} efetuado com sucesso \t {DateTime.Now:dd/MM/yyyy HH:mm:ss}");
+                _logger.LogInformation($"{funcionario} do(a) funcionário(a) {objFuncionario.Nome} efetuado com sucesso.");
                 return Ok(objFuncionario);
             }
 
@@ -58,7 +58,7 @@ namespace APIVenda.Controllers
             {
                 _logger.LogInformation("Buscando lista de funcionários...");
                 var funcionario = _funcionarioApp.ExibeFuncionarios(nome);
-                _logger.LogInformation($"Lista de funcionários exibidos com sucesso \t {DateTime.Now:dd/MM/yyyy HH:mm:ss}");
+                _logger.LogInformation($"Lista de funcionários exibidos com sucesso");
                 return Ok(funcionario);
 
             }
@@ -76,7 +76,7 @@ namespace APIVenda.Controllers
             {
                 _logger.LogInformation("Buscando funcionário por id...");
                 var funcionario = _funcionarioApp.ExibePorId(id);
-                _logger.LogInformation($"Funcionário {funcionario.Nome} encontrado \t {DateTime.Now:dd/MM/yyyy HH:mm:ss}");
+                _logger.LogInformation($"Funcionário {funcionario.Nome} encontrado.");
                 return Ok(funcionario);
 
             }
@@ -93,7 +93,7 @@ namespace APIVenda.Controllers
             {
                 _logger.LogInformation("Iniciando \"Deletar\'...");
                 var funcionario = _funcionarioApp.DeletaFuncionario(id);
-                _logger.LogInformation($"Funcionario {funcionario} deletado com sucesso \t {DateTime.Now:dd/MM/yyyy HH:mm:ss}");
+                _logger.LogInformation($"Funcionario {funcionario} deletado com sucesso.");
                 return Ok($"FUNCIONARIO {funcionario} deletado");
             }
             catch (Exception ex)
